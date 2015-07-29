@@ -8,25 +8,9 @@ Emotion::Emotion(void){
 	
 	Expression temp;
 	temp.name = "00. default";
-	temp.weight[0] = 0.0;
-	temp.weight[1] = 0.0;
-	temp.weight[2] = 0.0;
-	temp.weight[3]= 0.0;
-	temp.weight[4] = 0.0;
-	temp.weight[5] = 0.0;
-	temp.weight[6] = 0.0;
-	temp.weight[7] = 0.0;
-	temp.weight[8] = 0.0;
-	temp.weight[9] = 0.0;
-	temp.weight[10] = 0.0;
-	temp.weight[11] = 0.0;
-	temp.weight[12] = 0.0;
-	temp.weight[13] = 0.0;
-	temp.weight[14] = 0.0;
-	temp.weight[15] = 0.0;
 	saveEmotion(temp);
 
-	temp.name = "썩쏘";
+	temp.name = "01. 썩쏘";
 	temp.weight[0] = 30.0;
 	temp.weight[1] = 0.0;
 	temp.weight[2] = 30.0;
@@ -45,7 +29,6 @@ Emotion::Emotion(void){
 	temp.weight[15] = 0.0;
 	saveEmotion(temp);
 
-	
 }
 
 
@@ -58,12 +41,9 @@ Expression Emotion::getEmotion(){
 	// 특정 번호(콤보박스에서 선택하면 index 값이 int)에 해당하는 표정을 가져온다.
 	// 사용자가 선택한 Button View에서 선택한 emotion의 index를 가져와 emotion[index]에 해당하는 Expression instance를 반환하는 함수
 	
-	CMainFrame* pFrame1 = (CMainFrame *)AfxGetMainWnd();
-	pFrame1->m_wndSplitter.SetActivePane(0, 1);
-	ControllerView* controller = (ControllerView*)pFrame1->GetActiveView();
-
-	CMainFrame* pFrame2 = (CMainFrame *)AfxGetMainWnd();
-	CMerryView* pView  = (CMerryView *)pFrame2->m_wndSplitterSub.GetPane(0, 0);
+	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
+	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
+	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	
 	CString name;
 	controller->GetDlgItemText(IDC_COMBO1, name);

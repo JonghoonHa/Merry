@@ -111,14 +111,11 @@ void Blending::blendingFunction(void){
 
 	}
 
-
-
-
 	//////////////////////////////////////////////////////////////////////////////
 
 	for(int i=0;i<pDoc->units.size();i++){
 
-		// 规氢 - 芭府 包拌
+		// 规氢 - 芭府 包拌 利侩
 		if(pronounciation.weight[i] > 0.0){
 			for(int j=0;j<pDoc->units.size();j++){
 				if(i == 13){

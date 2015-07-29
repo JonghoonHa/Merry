@@ -226,7 +226,7 @@ void Speaking::transSentenceToIdx(void)
 {
 	/* 문장 translate */
 
-	//matchPronounciationIdx함수를 통해 문장을 Idx로 매칭
+	// matchPronounciationIdx함수를 통해 문장을 Idx로 매칭
 	for(int k=0;k<sentence.size();k++){
 				
 		char val = sentence[k];
@@ -235,7 +235,7 @@ void Speaking::transSentenceToIdx(void)
 		transSentence[k] = trans_val;
 	}
 
-	//'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
+	// 'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
 	for(int k=0;k<sentence.size()-3;k++){//?
 
 		if(sentence[k] == 'e' && 
@@ -331,8 +331,7 @@ int Speaking::matchPronounciationIdx(char letter){
 
 	switch(letter){
 
-	case '0':
-		//입다뭄
+	case '0': // 입다뭄
 		index = 0;
 		break;
 

@@ -1897,19 +1897,18 @@ void CMerryView::makeDirTable(){
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
-	// table 생성
+	// table 생성 & 초기화
 	int auSize = pDoc->units.size();
 
-	for(int i=0; i<auSize;i++){
+	for(int i=0; i<auSize; i++){
 		vector<float> row;
-		for(int j=0; j<auSize;j++){
-			float column = 1.0f;
-			row.push_back(column);
+		for(int j=0; j<auSize; j++){
+			row.push_back(1.0f);
 		}
 		pDoc->directionTable.push_back(row);
 	}
 
-	// 여기부터 본격적으로 table에 값을 채우는 내용
+	// table에 값을 채우는 내용
 
 	for(int i=0; i<box[31].pointInfo.size(); i++){
 		for(int p=0; p<box[31].pointInfo[i].size(); p++){
@@ -1917,6 +1916,8 @@ void CMerryView::makeDirTable(){
 
 				EffectedAU au1 = box[31].pointInfo[i][p];
 				EffectedAU au2 = box[31].pointInfo[i][q];
+
+				box[31].m_Normals[i];
 
 				// 두 벡터를 내적
 				float vResult = getInnerProduct(au1.moveVector,au2.moveVector);
@@ -1929,7 +1930,7 @@ void CMerryView::makeDirTable(){
 				float radian = acos(cosine);
 				float result = cos(radian/2);
 
-				//선정 과정이 맘에 안들어!
+				// 결과값이 가장 낮은 것을 선택
 				if(pDoc->directionTable[au1.auNum][au2.auNum] > result){
 						pDoc->directionTable[au1.auNum][au2.auNum] = result;
 						pDoc->directionTable[au2.auNum][au1.auNum] = result;
