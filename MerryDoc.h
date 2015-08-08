@@ -55,9 +55,4 @@ public:
 	vector<char> sentence;
 	bool animationFlag;
 
-//	void makeDirTable(vector <glm::vec3> position);
-//
-//private:
-//	float getLength(glm::vec3 vector);
-//	float getInnerProduct(glm::vec3 vec1, glm::vec3 vec2);
 };

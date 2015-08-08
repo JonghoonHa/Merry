@@ -18,10 +18,7 @@ IMPLEMENT_DYNCREATE(ControllerView, CFormView)
 ControllerView::ControllerView()
 	: CFormView(ControllerView::IDD)
 {
-	
 
-	
-	
 }
 
 ControllerView::~ControllerView()

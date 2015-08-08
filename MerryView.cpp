@@ -109,9 +109,6 @@ CMerryView::CMerryView()
 	getStartTime = true;
 	firstDraw = true;
 
-	
-
-
 	// 기타 -------------------------------------
 	M_PI=3.141592;
 	
@@ -266,15 +263,12 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
 
-		/*
-		emotion 관련 부분
-		*/
+		// emotion 관련 부분
 
 		blending.setEmotion();
 		blending.setPronounciation();
 		blending.blendingFunction();
 		relocate(blending.finalExpression);
-
 
 		controller->innerBrowRaiserR.SetPos(blending.finalExpression.weight[0]);
 		controller->innerBrowRaiserL.SetPos(blending.finalExpression.weight[1]);
@@ -293,11 +287,7 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		controller->lipsPart.SetPos(blending.finalExpression.weight[14]);
 		controller->stickOutLowerLip.SetPos(blending.finalExpression.weight[15]);
 
-
 	}
-
-	
-
 	
 }
 
@@ -541,16 +531,14 @@ void CMerryView::OnInitialUpdate()
 
 	////////////////////////////////////////////////////////////////////////////////////
 	
+	//Action Unit의 정보 읽어오기
 	putAUInfo();	
 
-	////////////////////////////////////////////////////////////////////////////////////
+	// 방향에 따른 가중치값 변경 table 생성
+	setDirTable();
 
-	//CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
-	//CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
-
-	//// 방향에 따른 가중치값 변경 table 생성
-	//pDoc->makeDirTable(box[31].originalPos);
-	makeDirTable();
+	// 입으로부터 각 AU의 거리
+	setDistFromMouth();
 
 }
 
@@ -882,8 +870,6 @@ void CMerryView::ReadfromObj(void){
 
 	box.push_back(onebox);	//마지막물체
 }
-
-
 void CMerryView::relocate(Expression totalExpression){
 
 	for(int i=0;i<box[31].currentPos.size();i++){
@@ -910,8 +896,6 @@ void CMerryView::relocate(Expression totalExpression){
 
 	Invalidate(FALSE);
 }
-
-
 void CMerryView::putAUInfo(void)
 {
 	// object의 vertex를 기준으로, 해당 vertex에 연관된 action unit의 목록을 등록한다.
@@ -1892,7 +1876,7 @@ void CMerryView::moveLips(int point, int au, glm::vec3 vector)
 
 }
 
-void CMerryView::makeDirTable(){
+void CMerryView::setDirTable(){
 
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
@@ -1916,8 +1900,6 @@ void CMerryView::makeDirTable(){
 
 				EffectedAU au1 = box[31].pointInfo[i][p];
 				EffectedAU au2 = box[31].pointInfo[i][q];
-
-				box[31].m_Normals[i];
 
 				// 두 벡터를 내적
 				float vResult = getInnerProduct(au1.moveVector,au2.moveVector);
@@ -1961,4 +1943,63 @@ float CMerryView::getInnerProduct(glm::vec3 vec1, glm::vec3 vec2){
 	value += vec1.z * vec2.z;
 
 	return value;
+}
+
+void CMerryView::setDistFromMouth(void){
+	// 입으로부터 각 AU의 거리
+
+	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
+	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
+
+	vector<int> mouth;
+	mouth.push_back(877);
+	mouth.push_back(69);
+
+	glm::vec3 midPoint_mouth = getMidPoint(mouth);
+
+	float limit = getDistance(midPoint_mouth, box[31].originalPos[1347]);
+
+	for(int i=0; i<pDoc->units.size(); i++){
+
+		glm::vec3 midPoint = getMidPoint(pDoc->units[i].actionPoint);
+
+		float distance = getDistance(midPoint_mouth, midPoint);
+
+		float value = distance / limit;
+
+		if(value > 1.0)	value = 1.0;
+
+		pDoc->units[i].distFromMouth  = value;
+
+	}
+
+}
+
+glm::vec3 CMerryView::getMidPoint(vector<int> points){
+	// 얼굴의 여러 점 사이의 중점
+
+	glm::vec3 result;
+
+	for(int i=0;i<points.size();i++){
+		result.x += box[31].originalPos[points[i]].x;
+		result.y += box[31].originalPos[points[i]].y;
+		result.z += box[31].originalPos[points[i]].z;
+	}
+
+	result /= points.size();
+
+	return result;
+}
+
+float CMerryView::getDistance(glm::vec3 p1, glm::vec3 p2){
+	// 두 점 사이의 거리
+
+	float result = pow((double)(p1.x - p2.x), 2);
+	result += pow((double)(p1.y - p2.y), 2);
+	result += pow((double)(p1.z - p2.z), 2);
+
+	result = sqrt(result);
+
+	return result;
+
 }

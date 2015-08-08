@@ -402,9 +402,6 @@ CMerryDoc::CMerryDoc()
 	//temp.actionPoint.clear();
 	//temp.distLimit.clear();
 	//temp.moveVector.clear();
-
-
-
 	
 
 }

@@ -29,8 +29,8 @@ Speaking::Speaking(void)
 	//완전 다뭄
 	pronounciations[0].name = "0";
 
-	pronounciations[0].weight[0] = 50.0;
-	pronounciations[0].weight[1] = 50.0;
+	pronounciations[0].weight[0] = 0.0;
+	pronounciations[0].weight[1] = 0.0;
 	pronounciations[0].weight[2] = 0.0;
 	pronounciations[0].weight[3] = 0.0;
 	pronounciations[0].weight[4] = 0.0;
@@ -50,10 +50,10 @@ Speaking::Speaking(void)
 
 	pronounciations[1].name = "01";
 
-	pronounciations[1].weight[0] = 50.0;
-	pronounciations[1].weight[1] = 50.0;
-	pronounciations[1].weight[2] = 10.0;
-	pronounciations[1].weight[3] = 10.0;
+	pronounciations[1].weight[0] = 0.0;
+	pronounciations[1].weight[1] = 0.0;
+	pronounciations[1].weight[2] = 0.0;
+	pronounciations[1].weight[3] = 0.0;
 	pronounciations[1].weight[4] = 0.0;
 	pronounciations[1].weight[5] = 0.0;
 	pronounciations[1].weight[6] = 0.0;
@@ -71,8 +71,8 @@ Speaking::Speaking(void)
 
 	pronounciations[2].name = "a";
 
-	pronounciations[2].weight[0] = 50.0;
-	pronounciations[2].weight[1] = 50.0;
+	pronounciations[2].weight[0] = 0.0;
+	pronounciations[2].weight[1] = 0.0;
 	pronounciations[2].weight[2] = 0.0;
 	pronounciations[2].weight[3] = 0.0;
 	pronounciations[2].weight[4] = 0.0;
@@ -91,8 +91,8 @@ Speaking::Speaking(void)
 
 	pronounciations[3].name = "e";
 
-	pronounciations[3].weight[0] = 50.0;
-	pronounciations[3].weight[1] = 50.0;
+	pronounciations[3].weight[0] = 0.0;
+	pronounciations[3].weight[1] = 0.0;
 	pronounciations[3].weight[2] = 0.0;
 	pronounciations[3].weight[3] = 0.0;
 	pronounciations[3].weight[4] = 0.0;
@@ -111,8 +111,8 @@ Speaking::Speaking(void)
 
 	pronounciations[4].name = "i";
 
-	pronounciations[4].weight[0] = 50.0;
-	pronounciations[4].weight[1] = 50.0;
+	pronounciations[4].weight[0] = 0.0;
+	pronounciations[4].weight[1] = 0.0;
 	pronounciations[4].weight[2] = 0.0;
 	pronounciations[4].weight[3] = 0.0;
 	pronounciations[4].weight[4] = 0.0;
@@ -131,8 +131,8 @@ Speaking::Speaking(void)
 
 	pronounciations[5].name = "o";
 
-	pronounciations[5].weight[0] = 50.0;
-	pronounciations[5].weight[1] = 50.0;
+	pronounciations[5].weight[0] = 0.0;
+	pronounciations[5].weight[1] = 0.0;
 	pronounciations[5].weight[2] = 0.0;
 	pronounciations[5].weight[3] = 0.0;
 	pronounciations[5].weight[4] = 0.0;
@@ -151,8 +151,8 @@ Speaking::Speaking(void)
 
 	pronounciations[6].name = "u";
 
-	pronounciations[6].weight[0] = 50.0;
-	pronounciations[6].weight[1] = 50.0;
+	pronounciations[6].weight[0] = 0.0;
+	pronounciations[6].weight[1] = 0.0;
 	pronounciations[6].weight[2] = 0.0;
 	pronounciations[6].weight[3] = 0.0;
 	pronounciations[6].weight[4] = 0.0;
@@ -171,8 +171,8 @@ Speaking::Speaking(void)
 
 	pronounciations[7].name = "y";
 
-	pronounciations[7].weight[0] = 50.0;
-	pronounciations[7].weight[1] = 50.0;
+	pronounciations[7].weight[0] = 0.0;
+	pronounciations[7].weight[1] = 0.0;
 	pronounciations[7].weight[2] = 0.0;
 	pronounciations[7].weight[3] = 0.0;
 	pronounciations[7].weight[4] = 0.0;
@@ -190,8 +190,8 @@ Speaking::Speaking(void)
 
 	pronounciations[8].name = "m";
 
-	pronounciations[8].weight[0] = 50.0;
-	pronounciations[8].weight[1] = 50.0;
+	pronounciations[8].weight[0] = 0.0;
+	pronounciations[8].weight[1] = 0.0;
 	pronounciations[8].weight[2] = 0.0;
 	pronounciations[8].weight[3] = 0.0;
 	pronounciations[8].weight[4] = 0.0;
@@ -421,7 +421,7 @@ void Speaking::setCharAtTime(DWORD diff)
 
 	}else{
 
-		//animatino end 조건 
+		//animation end 조건 
 		pView->animationFlag = false;
 		pView->getStartTime = true;
 
@@ -440,6 +440,7 @@ void Speaking::setCharAtTime(DWORD diff)
 			controller->tempExpression.weight[i] = pView->emotion.emotions[0].weight[i];
 		
 		}
+		// 애니메이션 끝나고 원래 표정으로 돌아가는 방법을 생각해보자.
 
 	}	
 

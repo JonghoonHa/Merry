@@ -6,7 +6,7 @@
 ActionUnit::ActionUnit(void)
 {
 	auNum = 0;
-
+	distFromMouth = 0.0;
 }
 
 
