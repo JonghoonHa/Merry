@@ -8,6 +8,10 @@ Emotion::Emotion(void){
 	
 	Expression temp;
 	temp.name = "00. default";
+	temp.weight[0] = 50.0;
+	temp.weight[1] = 50.0;
+	temp.weight[5] = 10.0;
+	temp.weight[6] = 10.0;
 	saveEmotion(temp);
 
 	temp.name = "01. ½â½î";
@@ -27,6 +31,25 @@ Emotion::Emotion(void){
 	temp.weight[13] = 0.0;
 	temp.weight[14] = 0.0;
 	temp.weight[15] = 0.0;
+	saveEmotion(temp);
+
+	temp.name = "02. »ý°¢Áß";
+	temp.weight[0] = 100.0;
+	temp.weight[1] = 100.0;
+	temp.weight[2] = 0.0;
+	temp.weight[3] = 0.0;
+	temp.weight[4] = 100.0;
+	temp.weight[5] = 15.0;
+	temp.weight[6] = 15.0;
+	temp.weight[7] = 0.0;
+	temp.weight[8] = 0.0;
+	temp.weight[9] = 0.0;
+	temp.weight[10] = 0.0;
+	temp.weight[11] = 0.0;
+	temp.weight[12] = 80.0;
+	temp.weight[13] = 65.0;
+	temp.weight[14] = 0.0;
+	temp.weight[15] = 25.0;
 	saveEmotion(temp);
 
 }

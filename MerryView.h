@@ -123,10 +123,14 @@ public:
 
 private:	
 	void moveLips(int point, int au, glm::vec3 vector);
-	void makeDirTable();
+	void setDirTable();
 
 	float getLength(glm::vec3 vector);
 	float getInnerProduct(glm::vec3 vec1, glm::vec3 vec2);
+
+	void setDistFromMouth();
+	glm::vec3 getMidPoint(vector<int> points);
+	float getDistance(glm::vec3 p1, glm::vec3 p2);
 };
 
 #ifndef _DEBUG  // MerryView.cpp의 디버그 버전

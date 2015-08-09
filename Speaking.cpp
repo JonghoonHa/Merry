@@ -210,12 +210,9 @@ Speaking::Speaking(void)
 
 }
 
-
 Speaking::~Speaking(void)
 {
 }
-
-
 
 Expression Speaking::getPronounciation(void)
 {
@@ -226,13 +223,9 @@ void Speaking::transSentenceToIdx(void)
 {
 	/* 문장 translate */
 
-	// matchPronounciationIdx함수를 통해 문장을 Idx로 매칭
 	for(int k=0;k<sentence.size();k++){
-				
-		char val = sentence[k];
-		int trans_val = matchPronounciationIdx(val);
 
-		transSentence[k] = trans_val;
+		transSentence[k] = matchPronounciationIdx(sentence[k]);
 	}
 
 	// 'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
@@ -250,16 +243,16 @@ void Speaking::transSentenceToIdx(void)
 	}
 
 
-	// 'name'에서 m을 a로 제어
-	for(int k=1;k<sentence.size()-1;k++){
+	//// 'name'에서 m을 a로 제어
+	//for(int k=1;k<sentence.size()-1;k++){
 
-			
-		if(sentence[k-1] == 'a' && sentence[k+1] == 'e' ){
-					
-			transSentence[k] = 2;
+	//		
+	//	if(sentence[k-1] == 'a' && sentence[k+1] == 'e' ){
+	//				
+	//		transSentence[k] = 2;
 
-		}
-	}
+	//	}
+	//}
 
 	// 'is'에서 s을 1로 제어
 	for(int k=1;k<sentence.size();k++){
@@ -327,6 +320,8 @@ void Speaking::transSentenceToIdx(void)
 
 int Speaking::matchPronounciationIdx(char letter){
 
+	// 문장 속의 특정 알파벳을 idx 값으로 변환
+
 	int index = 0;
 
 	switch(letter){
@@ -360,7 +355,15 @@ int Speaking::matchPronounciationIdx(char letter){
 		break;
 
 	case 'm':
-		index = 8;
+		index = 0;
+		break;
+
+	case 'b' :
+		index = 0;
+		break;
+
+	case 'p' :
+		index = 0;
 		break;
 
 	default :

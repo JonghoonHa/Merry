@@ -220,8 +220,6 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		
 	}
 
-	
-	
 	if ( FALSE == ::SwapBuffers( m_pDC->GetSafeHdc() ))
 	{
 		return;
@@ -463,7 +461,7 @@ void CMerryView::OnInitialUpdate()
 	glActiveTexture(GL_TEXTURE4);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textures[4]);
-	image = SOIL_load_image("obj/skin_color6.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	image = SOIL_load_image("obj/skin_color7.jpg", &width, &height, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	SOIL_free_image_data(image);
 	
@@ -596,6 +594,7 @@ bool CMerryView::makecontext(void)
 
 	return true;
 }
+
 bool CMerryView::initglew(void){
 
 	glewExperimental = GL_TRUE;
@@ -611,6 +610,7 @@ bool CMerryView::initglew(void){
 
 	return true;
 }
+
 bool CMerryView::newopengl(void){
 
 	const int attribList[] =
@@ -666,6 +666,7 @@ bool CMerryView::newopengl(void){
 	return true;
 
 }
+
 bool CMerryView::setopengl(void){
 
 	//Setup request for OpenGL 4.4 Core Profile
@@ -700,6 +701,7 @@ bool CMerryView::setopengl(void){
 	}
 	return true;
 }
+
 void CMerryView::Perspective(const GLfloat fovy, const GLfloat aspect,  const GLfloat zNear, const GLfloat zFar, GLfloat* mat){
 
 	GLfloat top   = tan(fovy/2.0*M_PI/180.0) * zNear;
@@ -713,6 +715,7 @@ void CMerryView::Perspective(const GLfloat fovy, const GLfloat aspect,  const GL
 	mat[14] = -2.0*zFar*zNear/(zFar - zNear);
 	mat[11] = -1.0;
 }
+
 void CMerryView::OnSize(UINT nType, int cx, int cy)
 {
 
@@ -729,6 +732,7 @@ void CMerryView::OnSize(UINT nType, int cx, int cy)
 	glUniformMatrix4fv( glGetUniformLocation(pro, "proj"), 1, GL_FALSE,  projection);
 	
 }
+
 char* CMerryView::ReadFromFile(char* filename){
 
 	FILE* fp; //파일포인터 타입 : 파일을 가리키는 포인터
@@ -759,6 +763,7 @@ char* CMerryView::ReadFromFile(char* filename){
 
 	return buf;
 }
+
 void CMerryView::ReadfromObj(void){
 
 	string inLineBuf;	//한 줄
@@ -870,6 +875,7 @@ void CMerryView::ReadfromObj(void){
 
 	box.push_back(onebox);	//마지막물체
 }
+
 void CMerryView::relocate(Expression totalExpression){
 
 	for(int i=0;i<box[31].currentPos.size();i++){
@@ -896,6 +902,7 @@ void CMerryView::relocate(Expression totalExpression){
 
 	Invalidate(FALSE);
 }
+
 void CMerryView::putAUInfo(void)
 {
 	// object의 vertex를 기준으로, 해당 vertex에 연관된 action unit의 목록을 등록한다.
@@ -1656,6 +1663,7 @@ void CMerryView::putAUInfo(void)
 	}
 	
 }
+
 void CMerryView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1664,6 +1672,7 @@ void CMerryView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 }
+
 void CMerryView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1671,6 +1680,7 @@ void CMerryView::OnRButtonUp(UINT nFlags, CPoint point)
 
 	CView::OnRButtonUp(nFlags, point);
 }
+
 void CMerryView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1679,6 +1689,7 @@ void CMerryView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnLButtonDown(nFlags, point);
 }
+
 void CMerryView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1686,6 +1697,7 @@ void CMerryView::OnLButtonUp(UINT nFlags, CPoint point)
 
 	CView::OnLButtonUp(nFlags, point);
 }
+
 void CMerryView::OnMouseMove(UINT nFlags, CPoint point)
 {
 
@@ -1819,6 +1831,7 @@ void CMerryView::OnMouseMove(UINT nFlags, CPoint point)
 
 	CView::OnMouseMove(nFlags, point);
 }
+
 void CMerryView::OnMButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1827,6 +1840,7 @@ void CMerryView::OnMButtonUp(UINT nFlags, CPoint point)
 
 	CView::OnMButtonUp(nFlags, point);
 }
+
 void CMerryView::OnMButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1835,7 +1849,9 @@ void CMerryView::OnMButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnMButtonDown(nFlags, point);
 }
+
 BOOL CMerryView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 

@@ -21,6 +21,7 @@ public:
 	vector <int> actionPoint;
 	vector <glm::vec3> moveVector;
 	vector <float> distLimit;
+	float distFromMouth;
 
 };
 

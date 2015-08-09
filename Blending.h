@@ -17,9 +17,13 @@ public:
 
 	float emotionWeight_flat;
 	float emotionWeight_event;
+	vector<float> emotionWeight;
 
 	void setEmotion(void);
 	void setPronounciation(void);
 	void blendingFunction(void);
+
+private:
+	void setEmotionWeight();
 };
 
