@@ -6,10 +6,6 @@
 
 Blending::Blending(void)
 {
-	// 16 = AU의 크기. AU 수가 바뀌면 수정해 주어야 함.
-	for(int i=0; i<16; i++){
-		emotionWeight.push_back(0.0);
-	}
 }
 
 
@@ -45,7 +41,7 @@ void Blending::blendingFunction(void){
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
-	setEmotionWeight();
+	vector<float> emotionWeight = setEmotionWeight();
 
 	for(int i=0;i<pDoc->units.size();i++){
 
@@ -64,11 +60,10 @@ void Blending::blendingFunction(void){
 
 		// (입으로부터의 거리) 일반화 과정 적용
 		finalExpression.weight[i] = pronounciation.weight[i] * 1.0 + emotion.weight[i] * emotionWeight[i];
-
 	}
 }
 
-void Blending::setEmotionWeight(void){
+vector<float> Blending::setEmotionWeight(void){
 
 	// 입으로부터 거리에 따른 Emotion Expression의 flat/event형 가중치 변화 적용
 	// 입으로부터 멀수록 animation 작동시 flat형 (animation과 무관하게 AU적용)
@@ -77,6 +72,13 @@ void Blending::setEmotionWeight(void){
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
+
+	vector<float> emotionWeight;
+
+	// emotionWeight 초기화
+	for(int i=0; i<pDoc->units.size(); i++){
+		emotionWeight.push_back(0.0);
+	}
 
 	for(int i=0; i<pDoc->units.size(); i++){
 
@@ -111,4 +113,5 @@ void Blending::setEmotionWeight(void){
 
 	}
 
+	return emotionWeight;
 }

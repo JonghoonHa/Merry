@@ -257,14 +257,12 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		diff = nowTime - startTime;
 
 		speaking.transSentenceToIdx();
-		speaking.setCharAtTime(diff);
+		speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
 
-		// emotion 관련 부분
-
-		blending.setEmotion();
 		blending.setPronounciation();
+		blending.setEmotion();		
 		blending.blendingFunction();
 		relocate(blending.finalExpression);
 
