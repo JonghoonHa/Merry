@@ -19,6 +19,8 @@ Speaking::Speaking(void)
 		pronounciations.push_back(temp);
 	}
 
+	emotionTagFlag = false;
+
 	//-----------------------------------------------
 
 	// 발음 변환 제어 조건
@@ -221,7 +223,7 @@ Expression Speaking::getPronounciation(void)
 
 void Speaking::transSentenceToIdx(void)
 {
-	/* 문장 translate */
+	// 입력한 문장을 시스템 내부 인덱스 값으로 변환
 
 	for(int k=0;k<sentence.size();k++){
 
@@ -230,7 +232,7 @@ void Speaking::transSentenceToIdx(void)
 
 	// 'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
 	for(int k=0;k<sentence.size()-3;k++){//?
-
+		 
 		if(sentence[k] == 'e' && 
 			(sentence[k+1] != ' ' && sentence[k+1] != '.' ) &&
 			(sentence[k+2] != ' ' && sentence[k+2] != '.' ) &&
@@ -241,7 +243,6 @@ void Speaking::transSentenceToIdx(void)
 
 		}
 	}
-
 
 	//// 'name'에서 m을 a로 제어
 	//for(int k=1;k<sentence.size()-1;k++){
@@ -313,8 +314,6 @@ void Speaking::transSentenceToIdx(void)
 		fclose(fp);
 
 	}
-	
-
 
 }
 
@@ -324,60 +323,56 @@ int Speaking::matchPronounciationIdx(char letter){
 
 	int index = 0;
 
-	switch(letter){
+	if(emotionTagFlag == false){
+		switch(letter){
 
-	case '0': // 입다뭄
-		index = 0;
-		break;
+		case '0': // 입다뭄
+			index = 0;	break;
+		case 'a':
+			index = 2;	break;
+		case 'e':
+			index = 3;	break;
+		case 'i':
+			index = 4;	break;
+		case 'o':
+			index= 5;	break;
+		case 'u':
+			index = 6;	break;
+		case 'y':
+			index = 7;	break;
+		case 'm':
+			index = 0;	break;
+		case 'b' :
+			index = 0;	break;
+		case 'p' :
+			index = 0;	break;
+		case '(' :
+			index = 0;
+			emotionTagFlag = true;
+			break;
 
-	case 'a':
-		index = 2;
-		break;
+		default :
+			// 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
+			index = 1;
+			break;
 
-	case 'e':
-		index = 3;
-		break;
+		}
+	}else{ // emotionTagFlag == true
 
-	case 'i':
-		index = 4;
-		break;
-
-	case 'o':
-		index= 5;
-		break;
-
-	case 'u':
-		index = 6;
-		break;
-
-	case 'y':
-		index = 7;
-		break;
-
-	case 'm':
-		index = 0;
-		break;
-
-	case 'b' :
-		index = 0;
-		break;
-
-	case 'p' :
-		index = 0;
-		break;
-
-	default :
-		// 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
-		index = 1;
-		break;
-
+		if(letter == ')'){
+			emotionTagFlag = false;
+			index = 0;
+		}
+		else{
+			index = int(letter - '0') * (-1);
+		}
 	}
 
 	return index;
 }
 
 
-void Speaking::setCharAtTime(DWORD diff)
+int Speaking::setCharAtTime(DWORD diff)
 {
 	// 애니메이션 경과 시간을 input으로 받아서 이전, 현재, 다음에 어떤 글자를 말하는지를 계산하여 반환하는 함수
 	
@@ -447,6 +442,7 @@ void Speaking::setCharAtTime(DWORD diff)
 
 	}	
 
+	return currIdx;
 }
 
 void Speaking::setWeightAtTime(DWORD diff)
@@ -473,8 +469,7 @@ void Speaking::calCurrLook(void){
 	for(int i=0;i<16;i++){
 
 		/* 말에 해당하는 각 순간의 AUpos값 */
-		nowLook.weight[i] = pronounciations[preIdx].weight[i] * preWeight
-			+ pronounciations[currIdx].weight[i] * currWeight;
+		nowLook.weight[i] = pronounciations[preIdx].weight[i] * preWeight + pronounciations[currIdx].weight[i] * currWeight;
 
 	}
 	

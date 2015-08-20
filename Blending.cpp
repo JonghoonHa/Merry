@@ -14,13 +14,13 @@ Blending::~Blending(void)
 }
 
 
-void Blending::setEmotion(void)
+void Blending::setEmotion(int spkIdx)
 {
 	// Emotion 클래스의 getEmotion()의 반환 값을 인자로 받아와 emotion변수 값으로 설정해주는 함수
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 
-	emotion = pView->emotion.getEmotion();
+	emotion = pView->emotion.getEmotion(spkIdx);
 }
 
 

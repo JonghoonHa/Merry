@@ -15,7 +15,7 @@ public:
 
 	Expression finalExpression;
 
-	void setEmotion(void);
+	void setEmotion(int spkIdx);
 	void setPronounciation(void);
 	void blendingFunction(void);
 

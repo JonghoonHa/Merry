@@ -33,7 +33,7 @@ Emotion::Emotion(void){
 	temp.weight[15] = 0.0;
 	saveEmotion(temp);
 
-	temp.name = "02. 생각중";
+	temp.name = "02. 생각";
 	temp.weight[0] = 100.0;
 	temp.weight[1] = 100.0;
 	temp.weight[2] = 0.0;
@@ -59,7 +59,7 @@ Emotion::~Emotion(void)
 {
 }
 
-Expression Emotion::getEmotion(){
+Expression Emotion::getEmotion(int spkIdx){
 	
 	// 특정 번호(콤보박스에서 선택하면 index 값이 int)에 해당하는 표정을 가져온다.
 	// 사용자가 선택한 Button View에서 선택한 emotion의 index를 가져와 emotion[index]에 해당하는 Expression instance를 반환하는 함수
@@ -68,17 +68,23 @@ Expression Emotion::getEmotion(){
 	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	
+	int id;
 	CString name;
 	controller->GetDlgItemText(IDC_COMBO1, name);
 
-	int id;
-	for(int i=0;i<pView->emotion.emotions.size();i++){
+	if(spkIdx <0){// 표정 + 표정  blending한 결과를 보여야 한다.
 
-		if(name == pView->emotion.emotions[i].name){
-			id = i;
-			break;
-		}
-	}	
+	}else{ // 기본 표정만 반환
+
+		
+		for(int i=0;i<pView->emotion.emotions.size();i++){
+
+			if(name == pView->emotion.emotions[i].name){
+				id = i;
+				break;
+			}
+		}	
+	}
 
 	return pView->emotion.emotions[id];
 }

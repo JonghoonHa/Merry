@@ -251,18 +251,19 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 			startTime = GetTickCount();
 			getStartTime = false;
 
+			speaking.transSentenceToIdx();
 		}
 
 		nowTime = GetTickCount();
 		diff = nowTime - startTime;
 
-		speaking.transSentenceToIdx();
-		speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
+		//speaking.transSentenceToIdx();
+		int spkIdx = speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
 
 		blending.setPronounciation();
-		blending.setEmotion();		
+		blending.setEmotion(spkIdx);		
 		blending.blendingFunction();
 		relocate(blending.finalExpression);
 

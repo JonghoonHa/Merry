@@ -12,7 +12,7 @@ public:
 
 	vector<Expression> emotions;
 
-	Expression getEmotion();
+	Expression getEmotion(int spkIdx);
 	void saveEmotion(Expression exp);
 
 };

@@ -11,6 +11,8 @@ public:
 	vector<char> sentence;
 	vector<int> transSentence;
 
+	bool emotionTagFlag;
+
 	Expression nowLook;
 	int introBlockNum;
 	int introTime;
@@ -27,7 +29,7 @@ public:
 
 	void transSentenceToIdx(void);
 	int matchPronounciationIdx(char letter);
-	void setCharAtTime(DWORD diff);	
+	int setCharAtTime(DWORD diff);	
 	void setWeightAtTime(DWORD diff);
 	void calCurrLook(void);
 
