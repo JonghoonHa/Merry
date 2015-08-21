@@ -49,7 +49,7 @@ void Blending::blendingFunction(void){
 		// 서로 다른 두 AU의 방향 관계가 180도에 가까울수록,
 		// Animation 작동시 Emotion에 해당하는 AU의 가중치가 낮아진다.
 		if(pronounciation.weight[i] > 0.0){
-			for(int j=0;j<pDoc->units.size();j++){
+			for(int j=i;j<pDoc->units.size();j++){
 
 				emotion.weight[j] *= pDoc->directionTable[i][j];
 			}

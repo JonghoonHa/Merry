@@ -307,6 +307,17 @@ void Speaking::transSentenceToIdx(void)
 		}
 	}
 
+	// 표정 태그인'(', ')'를 표정 값으로 제어
+	for(int k=0;k<sentence.size()-1;k++){
+						
+		if(sentence[k] == '('){
+			transSentence[k] = transSentence[k+1];
+		}
+		if(sentence[k] == ')'){
+			transSentence[k] = transSentence[k-1];
+		}
+	}
+
 	for(int k=0;k<sentence.size();k++){
 
 		FILE* fp = fopen("1111.txt","at+");
@@ -321,7 +332,7 @@ int Speaking::matchPronounciationIdx(char letter){
 
 	// 문장 속의 특정 알파벳을 idx 값으로 변환
 
-	int index = 0;
+	int index = 1; // 기본 상태 : 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
 
 	if(emotionTagFlag == false){
 		switch(letter){
@@ -347,21 +358,17 @@ int Speaking::matchPronounciationIdx(char letter){
 		case 'p' :
 			index = 0;	break;
 		case '(' :
-			index = 0;
 			emotionTagFlag = true;
 			break;
-
-		default :
-			// 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
-			index = 1;
-			break;
-
+		//default :
+		//	// 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
+		//	index = 1;
+		//	break;
 		}
 	}else{ // emotionTagFlag == true
 
 		if(letter == ')'){
 			emotionTagFlag = false;
-			index = 0;
 		}
 		else{
 			index = int(letter - '0') * (-1);
@@ -417,6 +424,12 @@ int Speaking::setCharAtTime(DWORD diff)
 
 		}	
 
+		if(currIdx<0){
+			int a = 0;
+			a +=1;
+		}
+		return currIdx;
+
 	}else{
 
 		//animation end 조건 
@@ -442,7 +455,7 @@ int Speaking::setCharAtTime(DWORD diff)
 
 	}	
 
-	return currIdx;
+	return 0;
 }
 
 void Speaking::setWeightAtTime(DWORD diff)
@@ -466,10 +479,25 @@ void Speaking::setWeightAtTime(DWORD diff)
 
 void Speaking::calCurrLook(void){
 
-	for(int i=0;i<16;i++){
+	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
+	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
+	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 
-		/* 말에 해당하는 각 순간의 AUpos값 */
-		nowLook.weight[i] = pronounciations[preIdx].weight[i] * preWeight + pronounciations[currIdx].weight[i] * currWeight;
+	Expression preExp;
+	Expression currExp;
+
+	// idx가 음수인 경우는 말 대신 문장 내 표정 태그에 의해 들어온 표정 값이다.
+	// 그러므로 emotion module에서 표정을 가져와 spk 표정으로 반환한다.
+
+	if(preIdx<0)	preExp = pView->emotion.emotions[abs(preIdx)];
+	else	preExp = pronounciations[preIdx];
+
+	if(currIdx<0)	currExp = pView->emotion.emotions[abs(currIdx)];
+	else	currExp = pronounciations[currIdx];
+	
+	for(int i=0;i<16;i++){ // 어떤 순간의 말하는 표정의 결과물. 이전 값과 현재 값의 조합.
+
+		nowLook.weight[i] = preExp.weight[i] * preWeight + currExp.weight[i] * currWeight;
 
 	}
 	

@@ -68,25 +68,17 @@ Expression Emotion::getEmotion(int spkIdx){
 	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	
-	int id;
+	int idx = 0;
 	CString name;
 	controller->GetDlgItemText(IDC_COMBO1, name);
 
-	if(spkIdx <0){// 표정 + 표정  blending한 결과를 보여야 한다.
+	for(idx=0; idx<pView->emotion.emotions.size(); idx++){
 
-	}else{ // 기본 표정만 반환
-
+		if(name == pView->emotion.emotions[idx].name)	break;
 		
-		for(int i=0;i<pView->emotion.emotions.size();i++){
-
-			if(name == pView->emotion.emotions[i].name){
-				id = i;
-				break;
-			}
-		}	
 	}
 
-	return pView->emotion.emotions[id];
+	return pView->emotion.emotions[idx];
 }
 
 void Emotion::saveEmotion(Expression exp){
