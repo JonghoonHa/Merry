@@ -43,6 +43,8 @@ void Blending::blendingFunction(void){
 
 	vector<float> emotionWeight = setEmotionWeight();
 
+	//github for a new branch
+
 	for(int i=0;i<pDoc->units.size();i++){
 
 		// 规氢 - 芭府 包拌 利侩
