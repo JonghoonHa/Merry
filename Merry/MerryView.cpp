@@ -68,7 +68,7 @@ END_MESSAGE_MAP()
 CMerryView::CMerryView()
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
-
+	/////////////////////////////////jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
 	//카메라 ------------------------------
 	pos[0]=30.0f;		//카메라위치
 	pos[1]=120.0f;
@@ -108,9 +108,6 @@ CMerryView::CMerryView()
 	animationFlag = false;
 	getStartTime = true;
 	firstDraw = true;
-
-	
-
 
 	// 기타 -------------------------------------
 	M_PI=3.141592;
@@ -223,8 +220,6 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		
 	}
 
-	
-	
 	if ( FALSE == ::SwapBuffers( m_pDC->GetSafeHdc() ))
 	{
 		return;
@@ -256,25 +251,21 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 			startTime = GetTickCount();
 			getStartTime = false;
 
+			speaking.transSentenceToIdx();
 		}
 
 		nowTime = GetTickCount();
 		diff = nowTime - startTime;
 
-		speaking.transSentenceToIdx();
-		speaking.setCharAtTime(diff);
+		//speaking.transSentenceToIdx();
+		int spkIdx = speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
 
-		/*
-		emotion 관련 부분
-		*/
-
-		blending.setEmotion();
 		blending.setPronounciation();
+		blending.setEmotion(spkIdx);		
 		blending.blendingFunction();
 		relocate(blending.finalExpression);
-
 
 		controller->innerBrowRaiserR.SetPos(blending.finalExpression.weight[0]);
 		controller->innerBrowRaiserL.SetPos(blending.finalExpression.weight[1]);
@@ -293,11 +284,7 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		controller->lipsPart.SetPos(blending.finalExpression.weight[14]);
 		controller->stickOutLowerLip.SetPos(blending.finalExpression.weight[15]);
 
-
 	}
-
-	
-
 	
 }
 
@@ -473,7 +460,7 @@ void CMerryView::OnInitialUpdate()
 	glActiveTexture(GL_TEXTURE4);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textures[4]);
-	image = SOIL_load_image("obj/skin_color6.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	image = SOIL_load_image("obj/skin_color7.jpg", &width, &height, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	SOIL_free_image_data(image);
 	
@@ -541,16 +528,14 @@ void CMerryView::OnInitialUpdate()
 
 	////////////////////////////////////////////////////////////////////////////////////
 	
+	//Action Unit의 정보 읽어오기
 	putAUInfo();	
 
-	////////////////////////////////////////////////////////////////////////////////////
+	// 방향에 따른 가중치값 변경 table 생성
+	setDirTable();
 
-	//CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
-	//CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
-
-	//// 방향에 따른 가중치값 변경 table 생성
-	//pDoc->makeDirTable(box[31].originalPos);
-	makeDirTable();
+	// 입으로부터 각 AU의 거리
+	setDistFromMouth();
 
 }
 
@@ -608,6 +593,7 @@ bool CMerryView::makecontext(void)
 
 	return true;
 }
+
 bool CMerryView::initglew(void){
 
 	glewExperimental = GL_TRUE;
@@ -623,6 +609,7 @@ bool CMerryView::initglew(void){
 
 	return true;
 }
+
 bool CMerryView::newopengl(void){
 
 	const int attribList[] =
@@ -678,6 +665,7 @@ bool CMerryView::newopengl(void){
 	return true;
 
 }
+
 bool CMerryView::setopengl(void){
 
 	//Setup request for OpenGL 4.4 Core Profile
@@ -712,6 +700,7 @@ bool CMerryView::setopengl(void){
 	}
 	return true;
 }
+
 void CMerryView::Perspective(const GLfloat fovy, const GLfloat aspect,  const GLfloat zNear, const GLfloat zFar, GLfloat* mat){
 
 	GLfloat top   = tan(fovy/2.0*M_PI/180.0) * zNear;
@@ -725,6 +714,7 @@ void CMerryView::Perspective(const GLfloat fovy, const GLfloat aspect,  const GL
 	mat[14] = -2.0*zFar*zNear/(zFar - zNear);
 	mat[11] = -1.0;
 }
+
 void CMerryView::OnSize(UINT nType, int cx, int cy)
 {
 
@@ -741,6 +731,7 @@ void CMerryView::OnSize(UINT nType, int cx, int cy)
 	glUniformMatrix4fv( glGetUniformLocation(pro, "proj"), 1, GL_FALSE,  projection);
 	
 }
+
 char* CMerryView::ReadFromFile(char* filename){
 
 	FILE* fp; //파일포인터 타입 : 파일을 가리키는 포인터
@@ -771,6 +762,7 @@ char* CMerryView::ReadFromFile(char* filename){
 
 	return buf;
 }
+
 void CMerryView::ReadfromObj(void){
 
 	string inLineBuf;	//한 줄
@@ -883,7 +875,6 @@ void CMerryView::ReadfromObj(void){
 	box.push_back(onebox);	//마지막물체
 }
 
-
 void CMerryView::relocate(Expression totalExpression){
 
 	for(int i=0;i<box[31].currentPos.size();i++){
@@ -910,7 +901,6 @@ void CMerryView::relocate(Expression totalExpression){
 
 	Invalidate(FALSE);
 }
-
 
 void CMerryView::putAUInfo(void)
 {
@@ -964,19 +954,6 @@ void CMerryView::putAUInfo(void)
 
 			box[31].pointInfo[i].push_back(temp);
 		}	
-
-		//limit = pDoc->units[0].distLimit[1];
-
-		//if(dist[1] <= limit && box[31].currentPos[i].x < box[31].currentPos[pDoc->units[0].actionPoint[2]].x - 10){
-
-		//	//weight값 계산_(AP와의 거리비율)
-		//	float _weight = ((limit - dist[1]) * 1.0/limit);
-		//				
-		//	temp.moveVector = pDoc->units[0].moveVector[2];
-		//	temp.weight = _weight;
-
-		//	box[31].pointInfo[i].push_back(temp);
-		//}	
 
 		/////////////////////////////////////////////////
 
@@ -1621,8 +1598,7 @@ void CMerryView::putAUInfo(void)
 		}
 		
 		temp.auNum = 14;
-		limit = pDoc->units[14].distLimit[0];
-		glm::vec3 vector = pDoc->units[14].moveVector[0];
+		
 
 		bool upperLipFlag = false;
 
@@ -1632,19 +1608,26 @@ void CMerryView::putAUInfo(void)
 				}
 		}
 
-		if(dist[0] <= limit && box[31].currentPos[i].y  <= 52.0 && upperLipFlag == false){
+		for(int j=0;j<3;j++){
 
-			//weight값 계산_(AP와의 거리비율)
+			limit = pDoc->units[14].distLimit[j];
+
+			if(dist[j] <= limit && box[31].currentPos[i].y  <= 52.0 && upperLipFlag == false){
+
+				//weight값 계산_(AP와의 거리비율)
 						
-			temp.moveVector = vector;
-			temp.weight = ((limit - dist[0]) * 1.0/limit);
+				temp.moveVector = pDoc->units[14].moveVector[j];
+				temp.weight = ((limit - dist[j]) * 1.0/limit);
 
-			box[31].pointInfo[i].push_back(temp);
+				box[31].pointInfo[i].push_back(temp);
+			}
+
 		}
 
+		// 입 안쪽 벌리기
 		for(int j=0;j<sizeof(lowerLip)/sizeof(int);j++){
 			if(i == lowerLip[j]){
-				moveLips(i, temp.auNum, vector);
+				moveLips(i, temp.auNum, pDoc->units[14].moveVector[2]);
 			}
 		}
 
@@ -1679,6 +1662,7 @@ void CMerryView::putAUInfo(void)
 	}
 	
 }
+
 void CMerryView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1687,6 +1671,7 @@ void CMerryView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnRButtonDown(nFlags, point);
 }
+
 void CMerryView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1694,6 +1679,7 @@ void CMerryView::OnRButtonUp(UINT nFlags, CPoint point)
 
 	CView::OnRButtonUp(nFlags, point);
 }
+
 void CMerryView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1702,6 +1688,7 @@ void CMerryView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnLButtonDown(nFlags, point);
 }
+
 void CMerryView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1709,6 +1696,7 @@ void CMerryView::OnLButtonUp(UINT nFlags, CPoint point)
 
 	CView::OnLButtonUp(nFlags, point);
 }
+
 void CMerryView::OnMouseMove(UINT nFlags, CPoint point)
 {
 
@@ -1842,6 +1830,7 @@ void CMerryView::OnMouseMove(UINT nFlags, CPoint point)
 
 	CView::OnMouseMove(nFlags, point);
 }
+
 void CMerryView::OnMButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1850,6 +1839,7 @@ void CMerryView::OnMButtonUp(UINT nFlags, CPoint point)
 
 	CView::OnMButtonUp(nFlags, point);
 }
+
 void CMerryView::OnMButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -1858,7 +1848,9 @@ void CMerryView::OnMButtonDown(UINT nFlags, CPoint point)
 
 	CView::OnMButtonDown(nFlags, point);
 }
+
 BOOL CMerryView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
@@ -1899,24 +1891,23 @@ void CMerryView::moveLips(int point, int au, glm::vec3 vector)
 
 }
 
-void CMerryView::makeDirTable(){
+void CMerryView::setDirTable(){
 
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
-	// table 생성
+	// table 생성 & 초기화
 	int auSize = pDoc->units.size();
 
-	for(int i=0; i<auSize;i++){
+	for(int i=0; i<auSize; i++){
 		vector<float> row;
-		for(int j=0; j<auSize;j++){
-			float column = 1.0f;
-			row.push_back(column);
+		for(int j=0; j<auSize; j++){
+			row.push_back(1.0f);
 		}
 		pDoc->directionTable.push_back(row);
 	}
 
-	// 여기부터 본격적으로 table에 값을 채우는 내용
+	// table에 값을 채우는 내용
 
 	for(int i=0; i<box[31].pointInfo.size(); i++){
 		for(int p=0; p<box[31].pointInfo[i].size(); p++){
@@ -1936,7 +1927,7 @@ void CMerryView::makeDirTable(){
 				float radian = acos(cosine);
 				float result = cos(radian/2);
 
-				//선정 과정이 맘에 안들어!
+				// 결과값이 가장 낮은 것을 선택
 				if(pDoc->directionTable[au1.auNum][au2.auNum] > result){
 						pDoc->directionTable[au1.auNum][au2.auNum] = result;
 						pDoc->directionTable[au2.auNum][au1.auNum] = result;
@@ -1967,4 +1958,63 @@ float CMerryView::getInnerProduct(glm::vec3 vec1, glm::vec3 vec2){
 	value += vec1.z * vec2.z;
 
 	return value;
+}
+
+void CMerryView::setDistFromMouth(void){
+	// 입으로부터 각 AU의 거리
+
+	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
+	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
+
+	vector<int> mouth;
+	mouth.push_back(877);
+	mouth.push_back(69);
+
+	glm::vec3 midPoint_mouth = getMidPoint(mouth);
+
+	float limit = getDistance(midPoint_mouth, box[31].originalPos[1347]);
+
+	for(int i=0; i<pDoc->units.size(); i++){
+
+		glm::vec3 midPoint = getMidPoint(pDoc->units[i].actionPoint);
+
+		float distance = getDistance(midPoint_mouth, midPoint);
+
+		float value = distance / limit;
+
+		if(value > 1.0)	value = 1.0;
+
+		pDoc->units[i].distFromMouth  = value;
+
+	}
+
+}
+
+glm::vec3 CMerryView::getMidPoint(vector<int> points){
+	// 얼굴의 여러 점 사이의 중점
+
+	glm::vec3 result;
+
+	for(int i=0;i<points.size();i++){
+		result.x += box[31].originalPos[points[i]].x;
+		result.y += box[31].originalPos[points[i]].y;
+		result.z += box[31].originalPos[points[i]].z;
+	}
+
+	result /= points.size();
+
+	return result;
+}
+
+float CMerryView::getDistance(glm::vec3 p1, glm::vec3 p2){
+	// 두 점 사이의 거리
+
+	float result = pow((double)(p1.x - p2.x), 2);
+	result += pow((double)(p1.y - p2.y), 2);
+	result += pow((double)(p1.z - p2.z), 2);
+
+	result = sqrt(result);
+
+	return result;
+
 }
