@@ -264,7 +264,7 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 
 		blending.setPronounciation();
 		blending.setEmotion(spkIdx);		
-		blending.blendingFunction();
+		blending.blendingFunction(diff, emotion.emotions[1]);
 		relocate(blending.finalExpression);
 
 		controller->innerBrowRaiserR.SetPos(blending.finalExpression.weight[0]);
