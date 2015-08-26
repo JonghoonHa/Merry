@@ -14,6 +14,25 @@ Emotion::Emotion(void){
 	temp.weight[6] = 10.0;
 	saveEmotion(temp);
 
+	temp.name = "´«°¨À½";
+	temp.weight[0] = 0.0;
+	temp.weight[1] = 0.0;
+	temp.weight[2] = 0.0;
+	temp.weight[3] = 0.0;
+	temp.weight[4] = 0.0;
+	temp.weight[5] = 100.0;
+	temp.weight[6] = 100.0;
+	temp.weight[7] = 0.0;
+	temp.weight[8] = 0.0;
+	temp.weight[9] = 0.0;
+	temp.weight[10] = 0.0;
+	temp.weight[11] = 0.0;
+	temp.weight[12] = 0.0;
+	temp.weight[13] = 0.0;
+	temp.weight[14] = 0.0;
+	temp.weight[15] = 0.0;
+	saveEmotion(temp);
+
 	temp.name = "01. ½â½î";
 	temp.weight[0] = 30.0;
 	temp.weight[1] = 0.0;

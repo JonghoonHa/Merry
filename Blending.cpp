@@ -6,6 +6,12 @@
 
 Blending::Blending(void)
 {
+	eyeClosedOn = 0;
+	eyeStatus = 0.0f;
+	preDiff = 0;
+
+	w1 = 1.0;
+	w2 = 0.0;
 }
 
 
@@ -58,10 +64,20 @@ void Blending::blendingFunction(void){
 		}
 	}
 
-	for(int i=0;i<pDoc->units.size();i++){
+	//////////////////////////////////////////////////////////////////////////////
+
+	/*----------------------------
+	눈깜빡임 효과 코드
+	---------------------------*/
+	BlendWithEyeClosed(diff, eyeclosed, emotionWeight);
+
+	//////////////////////////////////////////////////////////////////////////////
+
+
+	for (int i = 0;i<pDoc->units.size();i++) {
 
 		// (입으로부터의 거리) 일반화 과정 적용
-		finalExpression.weight[i] = pronounciation.weight[i] * 1.0 + emotion.weight[i] * emotionWeight[i];
+		finalExpression.weight[i] = pronounciation.weight[i] * 1.0 + emotion_withEyeclose.weight[i];
 	}
 }
 
@@ -116,4 +132,73 @@ vector<float> Blending::setEmotionWeight(void){
 	}
 
 	return emotionWeight;
+}
+void Blending::BlendWithEyeClosed(DWORD diff, Expression eyeClosed, vector<float> emotionWeight) {
+
+	/*
+
+	눈깜빡임 코드------------------------------------------
+
+	현재 emotion표정과 eyeclosed표정을 시간이 지남에 따라 주기적으로 블렌딩(5초마다)
+
+	eyeStatus = (emotion.weight[]*emotion_event)
+	emotion_withEyeclose.weight[] = w1*eyeStatus + w2*eyeclosed.weight[];
+
+	(설명)-------------------------------------------------
+	(emotion.weight[5]*emotion_event) 값이 변수이기 때문에,
+	주기가 시작되는 순간의 (emotion.weight[5]*emotion_event) 값을 eyeStatus값으로 저장하여 상수로 변환.
+	즉, eyeStatus는 현재의 감정표정 emotion.weight[5]를 대변하는 값
+	또한 eyeClosed.weight[5],[6]값은 항상 100으로 상수
+
+	w1,w2값을 변화시켜 눈깜빡임 효과 생성(두가지 표정의 블렌딩)
+
+	항상 오른쪽 눈(weight[5])기준
+
+	*/
+
+	for (int i = 0;i < 16;i++) {
+		emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];
+	}
+
+	if (diff - preDiff >= 5000 && eyeClosedOn == 0) {
+
+		eyeClosedOn = 1;	//눈깜빡임 효과 시작
+		eyeStatus = emotion.weight[5] * emotionWeight[5];
+	}
+
+	if (eyeClosedOn == 1) {
+
+		//eyeStatus와 눈깜빡임 표정 블렌딩			
+		emotion_withEyeclose.weight[5] = w1*eyeStatus + w2*eyeClosed.weight[5];
+		emotion_withEyeclose.weight[6] = w1*eyeStatus + w2*eyeClosed.weight[6];
+		w1 -= 0.3;
+		w2 += 0.3;
+
+		if (w2 >= 1.0) {
+			// 눈 뜨기로 전환
+			emotion_withEyeclose.weight[5] = eyeClosed.weight[5];	//weight값이 1.0넘어갈 경우 1.0으로!
+			emotion_withEyeclose.weight[6] = eyeClosed.weight[6];
+			eyeClosedOn = 2;
+		}
+
+	}
+	else if (eyeClosedOn == 2) {
+
+		//눈 뜨기
+		w1 += 0.3;
+		w2 -= 0.3;
+		emotion_withEyeclose.weight[5] = w1*eyeStatus + w2*eyeClosed.weight[5];
+		emotion_withEyeclose.weight[6] = w1*eyeStatus + w2*eyeClosed.weight[6];
+
+
+		if (emotion_withEyeclose.weight[5] < emotion.weight[5] * emotionWeight[5]) {
+
+			emotion_withEyeclose.weight[5] = emotion.weight[5] * emotionWeight[5];
+			emotion_withEyeclose.weight[6] = emotion.weight[6] * emotionWeight[6];
+			eyeClosedOn = 0;
+
+			preDiff = diff;
+		}
+	}
+
 }

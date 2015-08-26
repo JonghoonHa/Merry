@@ -11,13 +11,21 @@ public:
 	~Blending(void);
 
 	Expression emotion;
+	Expression emotion_withEyeclose;
 	Expression pronounciation;
 
 	Expression finalExpression;
 
+	int eyeClosedOn;
+	float eyeStatus;
+	DWORD preDiff;
+	float w1, w2;
+
 	void setEmotion(int spkIdx);
 	void setPronounciation(void);
-	void blendingFunction(void);
+	void BlendWithEyeClosed(DWORD diff, Expression eyeclosed, vector<float> emotionWeight);
+	void blendingFunction(DWORD diff, Expression eyeclosed);
+
 
 private:
 	vector<float> setEmotionWeight();
