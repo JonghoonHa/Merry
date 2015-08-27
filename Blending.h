@@ -21,7 +21,7 @@ public:
 	DWORD preDiff;
 	float w1, w2;
 
-	void setEmotion(int spkIdx);
+	void setEmotion();
 	void setPronounciation(void);
 	void BlendWithEyeClosed(DWORD diff, Expression eyeclosed, vector<float> emotionWeight);
 	void blendingFunction(DWORD diff, Expression eyeclosed);

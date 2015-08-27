@@ -13,12 +13,6 @@ Speaking::Speaking(void)
 	preIdx = 0; currIdx = 0; nextIdx = 0;
 	preWeight = 0.0; currWeight = 0.0; nextWeight = 0.0;
 
-
-	Expression temp;
-	for(int i=0;i<9;i++){
-		pronounciations.push_back(temp);
-	}
-
 	emotionTagFlag = false;
 
 	//-----------------------------------------------
@@ -28,187 +22,45 @@ Speaking::Speaking(void)
 
 	//------------------------------------------------
 
-	//완전 다뭄
-	pronounciations[0].name = "0";
+	// 발음 표정 생성
 
-	pronounciations[0].weight[0] = 0.0;
-	pronounciations[0].weight[1] = 0.0;
-	pronounciations[0].weight[2] = 0.0;
-	pronounciations[0].weight[3] = 0.0;
-	pronounciations[0].weight[4] = 0.0;
-	pronounciations[0].weight[5] = 0.0;
-	pronounciations[0].weight[6] = 0.0;
-	pronounciations[0].weight[7] = 0.0;
-	pronounciations[0].weight[8] = 0.0;
-	pronounciations[0].weight[9] = 0.0;
-	pronounciations[0].weight[10] = 0.0;
-	pronounciations[0].weight[11] = 0.0;
-	pronounciations[0].weight[12] = 0.0;
-	pronounciations[0].weight[13] = 0.0;
-	pronounciations[0].weight[14] = 0.0;
-	pronounciations[0].weight[15] = 0.0;
+	//완전 다뭄
+	float tWeight0[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	Expression tTemp0("0", tWeight0);
+	pronounciations.push_back(tTemp0);
 
 	// 말 중간 ( 조금 다뭄 )
+	float tWeight1[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0};
+	Expression tTemp1("01", tWeight1);
+	pronounciations.push_back(tTemp1);
 
-	pronounciations[1].name = "01";
+	float tWeight2[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0};
+	Expression tTemp2("a", tWeight2);
+	pronounciations.push_back(tTemp2);
 
-	pronounciations[1].weight[0] = 0.0;
-	pronounciations[1].weight[1] = 0.0;
-	pronounciations[1].weight[2] = 0.0;
-	pronounciations[1].weight[3] = 0.0;
-	pronounciations[1].weight[4] = 0.0;
-	pronounciations[1].weight[5] = 0.0;
-	pronounciations[1].weight[6] = 0.0;
-	pronounciations[1].weight[7] = 0.0;
-	pronounciations[1].weight[8] = 0.0;
-	pronounciations[1].weight[9] = 0.0;
-	pronounciations[1].weight[10] = 0.0;
-	pronounciations[1].weight[11] = 0.0;
-	pronounciations[1].weight[12] = 0.0;
-	pronounciations[1].weight[13] = 0.0;
-	pronounciations[1].weight[14] = 20.0;
-	pronounciations[1].weight[15] = 0.0;
+	float tWeight3[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 50.0, 50.0, 0.0, 0.0, 40.0, 0.0};
+	Expression tTemp3("e", tWeight3);
+	pronounciations.push_back(tTemp3);
 
+	float tWeight4[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 80.0, 0.0, 0.0, 20.0, 0.0};
+	Expression tTemp4("i", tWeight4);
+	pronounciations.push_back(tTemp4);
 
+	float tWeight5[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 60.0, 0.0};
+	Expression tTemp5("o", tWeight5);
+	pronounciations.push_back(tTemp5);
 
-	pronounciations[2].name = "a";
+	float tWeight6[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 100.0, 60.0, 0.0};
+	Expression tTemp6("u", tWeight6);
+	pronounciations.push_back(tTemp6);
 
-	pronounciations[2].weight[0] = 0.0;
-	pronounciations[2].weight[1] = 0.0;
-	pronounciations[2].weight[2] = 0.0;
-	pronounciations[2].weight[3] = 0.0;
-	pronounciations[2].weight[4] = 0.0;
-	pronounciations[2].weight[5] = 0.0;
-	pronounciations[2].weight[6] = 0.0;
-	pronounciations[2].weight[7] = 0.0;
-	pronounciations[2].weight[8] = 0.0;
-	pronounciations[2].weight[9] = 0.0;
-	pronounciations[2].weight[10] = 0.0;
-	pronounciations[2].weight[11] = 0.0;
-	pronounciations[2].weight[12] = 0.0;
-	pronounciations[2].weight[13] = 0.0;
-	pronounciations[2].weight[14] = 100.0;
-	pronounciations[2].weight[15] = 0.0;
+	float tWeight7[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 50.0, 50.0, 0.0, 0.0, 10.0, 0.0};
+	Expression tTemp7("y", tWeight7);
+	pronounciations.push_back(tTemp7);
 
-
-	pronounciations[3].name = "e";
-
-	pronounciations[3].weight[0] = 0.0;
-	pronounciations[3].weight[1] = 0.0;
-	pronounciations[3].weight[2] = 0.0;
-	pronounciations[3].weight[3] = 0.0;
-	pronounciations[3].weight[4] = 0.0;
-	pronounciations[3].weight[5] = 0.0;
-	pronounciations[3].weight[6] = 0.0;
-	pronounciations[3].weight[7] = 0.0;
-	pronounciations[3].weight[8] = 0.0;
-	pronounciations[3].weight[9] = 0.0;
-	pronounciations[3].weight[10] = 50.0;
-	pronounciations[3].weight[11] = 50.0;
-	pronounciations[3].weight[12] = 0.0;
-	pronounciations[3].weight[13] = 0.0;
-	pronounciations[3].weight[14] = 40.0;
-	pronounciations[3].weight[15] = 0.0;
-
-
-	pronounciations[4].name = "i";
-
-	pronounciations[4].weight[0] = 0.0;
-	pronounciations[4].weight[1] = 0.0;
-	pronounciations[4].weight[2] = 0.0;
-	pronounciations[4].weight[3] = 0.0;
-	pronounciations[4].weight[4] = 0.0;
-	pronounciations[4].weight[5] = 0.0;
-	pronounciations[4].weight[6] = 0.0;
-	pronounciations[4].weight[7] = 0.0;
-	pronounciations[4].weight[8] = 0.0;
-	pronounciations[4].weight[9] = 0.0;
-	pronounciations[4].weight[10] = 80.0;
-	pronounciations[4].weight[11] = 80.0;
-	pronounciations[4].weight[12] = 0.0;
-	pronounciations[4].weight[13] = 0.0;
-	pronounciations[4].weight[14] = 20.0;
-	pronounciations[4].weight[15] = 0.0;
-
-
-	pronounciations[5].name = "o";
-
-	pronounciations[5].weight[0] = 0.0;
-	pronounciations[5].weight[1] = 0.0;
-	pronounciations[5].weight[2] = 0.0;
-	pronounciations[5].weight[3] = 0.0;
-	pronounciations[5].weight[4] = 0.0;
-	pronounciations[5].weight[5] = 0.0;
-	pronounciations[5].weight[6] = 0.0;
-	pronounciations[5].weight[7] = 0.0;
-	pronounciations[5].weight[8] = 0.0;
-	pronounciations[5].weight[9] = 0.0;
-	pronounciations[5].weight[10] = 0.0;
-	pronounciations[5].weight[11] = 0.0;
-	pronounciations[5].weight[12] = 0.0;
-	pronounciations[5].weight[13] = 100.0;
-	pronounciations[5].weight[14] = 60.0;
-	pronounciations[5].weight[15] = 0.0;
-		
-
-	pronounciations[6].name = "u";
-
-	pronounciations[6].weight[0] = 0.0;
-	pronounciations[6].weight[1] = 0.0;
-	pronounciations[6].weight[2] = 0.0;
-	pronounciations[6].weight[3] = 0.0;
-	pronounciations[6].weight[4] = 0.0;
-	pronounciations[6].weight[5] = 0.0;
-	pronounciations[6].weight[6] = 0.0;
-	pronounciations[6].weight[7] = 0.0;
-	pronounciations[6].weight[8] = 0.0;
-	pronounciations[6].weight[9] = 0.0;
-	pronounciations[6].weight[10] = 0.0;
-	pronounciations[6].weight[11] = 0.0;
-	pronounciations[6].weight[12] = 80.0;
-	pronounciations[6].weight[13] = 100.0;
-	pronounciations[6].weight[14] = 60.0;
-	pronounciations[6].weight[15] = 0.0;
-		
-
-	pronounciations[7].name = "y";
-
-	pronounciations[7].weight[0] = 0.0;
-	pronounciations[7].weight[1] = 0.0;
-	pronounciations[7].weight[2] = 0.0;
-	pronounciations[7].weight[3] = 0.0;
-	pronounciations[7].weight[4] = 0.0;
-	pronounciations[7].weight[5] = 0.0;
-	pronounciations[7].weight[6] = 0.0;
-	pronounciations[7].weight[7] = 0.0;
-	pronounciations[7].weight[8] = 0.0;
-	pronounciations[7].weight[9] = 0.0;
-	pronounciations[7].weight[10] = 50.0;
-	pronounciations[7].weight[11] = 50.0;
-	pronounciations[7].weight[12] = 0.0;
-	pronounciations[7].weight[13] = 0.0;
-	pronounciations[7].weight[14] = 10.0;
-	pronounciations[7].weight[15] = 0.0;
-
-	pronounciations[8].name = "m";
-
-	pronounciations[8].weight[0] = 0.0;
-	pronounciations[8].weight[1] = 0.0;
-	pronounciations[8].weight[2] = 0.0;
-	pronounciations[8].weight[3] = 0.0;
-	pronounciations[8].weight[4] = 0.0;
-	pronounciations[8].weight[5] = 0.0;
-	pronounciations[8].weight[6] = 0.0;
-	pronounciations[8].weight[7] = 0.0;
-	pronounciations[8].weight[8] = 0.0;
-	pronounciations[8].weight[9] = 0.0;
-	pronounciations[8].weight[10] = 0.0;
-	pronounciations[8].weight[11] = 0.0;
-	pronounciations[8].weight[12] = 0.0;
-	pronounciations[8].weight[13] = 0.0;
-	pronounciations[8].weight[14] = 100.0;
-	pronounciations[8].weight[15] = 0.0;
-
+	float tWeight8[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0};
+	Expression tTemp8("m", tWeight8);
+	pronounciations.push_back(tTemp8);
 
 }
 
@@ -243,17 +95,6 @@ void Speaking::transSentenceToIdx(void)
 
 		}
 	}
-
-	//// 'name'에서 m을 a로 제어
-	//for(int k=1;k<sentence.size()-1;k++){
-
-	//		
-	//	if(sentence[k-1] == 'a' && sentence[k+1] == 'e' ){
-	//				
-	//		transSentence[k] = 2;
-
-	//	}
-	//}
 
 	// 'is'에서 s을 1로 제어
 	for(int k=1;k<sentence.size();k++){
@@ -307,24 +148,24 @@ void Speaking::transSentenceToIdx(void)
 		}
 	}
 
-	// 표정 태그인'(', ')'를 표정 값으로 제어
-	for(int k=0;k<sentence.size()-1;k++){
-						
-		if(sentence[k] == '('){
-			transSentence[k] = transSentence[k+1];
-		}
-		if(sentence[k] == ')'){
-			transSentence[k] = transSentence[k-1];
-		}
-	}
+	////표정 태그인'(', ')'를 표정 값으로 제어
+	//for(int k=0;k<sentence.size()-1;k++){
+	//					
+	//	if(sentence[k] == '('){
+	//		transSentence[k] = transSentence[k+1];
+	//	}
+	//	if(sentence[k] == ')'){
+	//		transSentence[k] = transSentence[k-1];
+	//	}
+	//}
 
-	for(int k=0;k<sentence.size();k++){
+	//for(int k=0;k<sentence.size();k++){
 
-		FILE* fp = fopen("1111.txt","at+");
-		fprintf(fp,"%d   \n", transSentence[k] );
-		fclose(fp);
+	//	FILE* fp = fopen("1111.txt","at+");
+	//	fprintf(fp,"%d   \n", transSentence[k] );
+	//	fclose(fp);
 
-	}
+	//}
 
 }
 
@@ -332,7 +173,7 @@ int Speaking::matchPronounciationIdx(char letter){
 
 	// 문장 속의 특정 알파벳을 idx 값으로 변환
 
-	int index = 1; // 기본 상태 : 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
+	int index = 1;
 
 	if(emotionTagFlag == false){
 		switch(letter){
@@ -358,16 +199,18 @@ int Speaking::matchPronounciationIdx(char letter){
 		case 'p' :
 			index = 0;	break;
 		case '(' :
+			index = 0;
 			emotionTagFlag = true;
 			break;
-		//default :
-		//	// 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
-		//	index = 1;
-		//	break;
+		default :
+			// 지정되지 않은 자음, 띄어쓰기(공백), 마침표 등
+			index = 1;
+			break;
 		}
 	}else{ // emotionTagFlag == true
 
 		if(letter == ')'){
+			index = 0;
 			emotionTagFlag = false;
 		}
 		else{
@@ -405,7 +248,7 @@ int Speaking::setCharAtTime(DWORD diff)
 
 			// 맨 마지막 글자 다음 block
 
-			preIdx = transSentence[diff/speed - (introBlockNum + 1) ];	
+			preIdx = transSentence[diff/speed - introBlockNum - 1 ];	
 			currIdx= matchPronounciationIdx('0');
 
 		}else if( (int)diff >= ((sentence.size() + introBlockNum + 1) * speed) ){
@@ -418,16 +261,11 @@ int Speaking::setCharAtTime(DWORD diff)
 
 			//------------------------------------------------------------------------------------ 나머지
 				
-			preIdx = transSentence[diff/speed - (introBlockNum + 1) ];	
+			preIdx = transSentence[diff/speed - introBlockNum - 1 ];	
 			currIdx = transSentence[diff/speed - introBlockNum ];	
-				
 
 		}	
 
-		if(currIdx<0){
-			int a = 0;
-			a +=1;
-		}
 		return currIdx;
 
 	}else{

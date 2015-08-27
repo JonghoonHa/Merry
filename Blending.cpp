@@ -20,13 +20,13 @@ Blending::~Blending(void)
 }
 
 
-void Blending::setEmotion(int spkIdx)
+void Blending::setEmotion()
 {
 	// Emotion 클래스의 getEmotion()의 반환 값을 인자로 받아와 emotion변수 값으로 설정해주는 함수
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 
-	emotion = pView->emotion.getEmotion(spkIdx);
+	emotion = pView->emotion.getEmotion();
 }
 
 
@@ -39,7 +39,7 @@ void Blending::setPronounciation(void){
 	pronounciation = pView->speaking.getPronounciation();
 }
 
-void Blending::blendingFunction(void){
+void Blending::blendingFunction(DWORD diff, Expression eyeclosed){
 
 	// emotion과 pronounciation을 blending시키는 알고리즘을 통해 최종 표정을 결정하여 반환해주는 함수
 
@@ -131,6 +131,7 @@ vector<float> Blending::setEmotionWeight(void){
 
 	return emotionWeight;
 }
+
 void Blending::BlendWithEyeClosed(DWORD diff, Expression eyeClosed, vector<float> emotionWeight) {
 
 	/*

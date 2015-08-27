@@ -8,6 +8,7 @@ class Expression
 {
 public:
 	Expression(void);
+	Expression(char* tName, float* tWeight);
 	~Expression(void);
 
 	CString name;

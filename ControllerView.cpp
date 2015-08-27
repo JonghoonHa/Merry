@@ -139,10 +139,10 @@ void ControllerView::OnInitialUpdate()
 	for(int i=0;i<pView->emotion.emotions.size();i++){
 		
 		/*
-		눈감기표정의 경우 보이지 않게 함(i==1)
+		눈감기표정의 경우 보이지 않게 함(i==0)
 		*/
 
-		if (i != 1) {
+		if (i != 0) {
 			Expression temp = pView->emotion.emotions[i];
 			expressionList.AddString(temp.name);
 		}

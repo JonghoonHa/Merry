@@ -20,7 +20,6 @@ public:
 	int preIdx, currIdx, nextIdx;
 	float preWeight, currWeight, nextWeight;
 
-	
 	float speed;
 
 	bool this_condition_end;

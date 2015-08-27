@@ -5,71 +5,22 @@
 
 
 Emotion::Emotion(void){
-	
-	Expression temp;
-	temp.name = "00. default";
-	temp.weight[0] = 50.0;
-	temp.weight[1] = 50.0;
-	temp.weight[5] = 10.0;
-	temp.weight[6] = 10.0;
-	saveEmotion(temp);
 
-	temp.name = "눈감음";
-	temp.weight[0] = 0.0;
-	temp.weight[1] = 0.0;
-	temp.weight[2] = 0.0;
-	temp.weight[3] = 0.0;
-	temp.weight[4] = 0.0;
-	temp.weight[5] = 100.0;
-	temp.weight[6] = 100.0;
-	temp.weight[7] = 0.0;
-	temp.weight[8] = 0.0;
-	temp.weight[9] = 0.0;
-	temp.weight[10] = 0.0;
-	temp.weight[11] = 0.0;
-	temp.weight[12] = 0.0;
-	temp.weight[13] = 0.0;
-	temp.weight[14] = 0.0;
-	temp.weight[15] = 0.0;
-	saveEmotion(temp);
+	float tWeight0[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	Expression tTemp0("00. 눈감음", tWeight0);
+	emotions.push_back(tTemp0);
 
-	temp.name = "01. 썩쏘";
-	temp.weight[0] = 30.0;
-	temp.weight[1] = 0.0;
-	temp.weight[2] = 30.0;
-	temp.weight[3]= 100.0;
-	temp.weight[4] = 60.0;
-	temp.weight[5] = 5.0;
-	temp.weight[6] = 20.0;
-	temp.weight[7] = 0.0;
-	temp.weight[8] = 30.0;
-	temp.weight[9] = 30.0;
-	temp.weight[10] = 0.0;
-	temp.weight[11] = 100.0;
-	temp.weight[12] = 30.0;
-	temp.weight[13] = 0.0;
-	temp.weight[14] = 0.0;
-	temp.weight[15] = 0.0;
-	saveEmotion(temp);
+	float tWeight1[16] = {50.0, 50.0, 0.0, 0.0, 0.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	Expression tTemp1("01. default", tWeight1);
+	emotions.push_back(tTemp1);
 
-	temp.name = "02. 생각";
-	temp.weight[0] = 100.0;
-	temp.weight[1] = 100.0;
-	temp.weight[2] = 0.0;
-	temp.weight[3] = 0.0;
-	temp.weight[4] = 100.0;
-	temp.weight[5] = 15.0;
-	temp.weight[6] = 15.0;
-	temp.weight[7] = 0.0;
-	temp.weight[8] = 0.0;
-	temp.weight[9] = 0.0;
-	temp.weight[10] = 0.0;
-	temp.weight[11] = 0.0;
-	temp.weight[12] = 80.0;
-	temp.weight[13] = 65.0;
-	temp.weight[14] = 0.0;
-	temp.weight[15] = 25.0;
-	saveEmotion(temp);
+	float tWeight2[16] = {30.0, 0.0, 30.0, 100.0, 60.0, 5.0, 20.0, 0.0, 30.0, 30.0, 0.0, 100.0, 30.0, 0.0, 0.0, 0.0};
+	Expression tTemp2("02. 썩소", tWeight2);
+	emotions.push_back(tTemp2);
+
+	float tWeight3[16] = {100.0, 100.0, 0.0, 0.0, 100.0, 15.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 65.0, 0.0, 25.0};
+	Expression tTemp3("03. 생각", tWeight3);
+	emotions.push_back(tTemp3);
 
 }
 
@@ -78,7 +29,7 @@ Emotion::~Emotion(void)
 {
 }
 
-Expression Emotion::getEmotion(int spkIdx){
+Expression Emotion::getEmotion(){
 	
 	// 특정 번호(콤보박스에서 선택하면 index 값이 int)에 해당하는 표정을 가져온다.
 	// 사용자가 선택한 Button View에서 선택한 emotion의 index를 가져와 emotion[index]에 해당하는 Expression instance를 반환하는 함수

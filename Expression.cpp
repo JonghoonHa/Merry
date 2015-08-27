@@ -8,8 +8,17 @@ Expression::Expression(void)
 {
 	name = _T("");
 
-	for(int i=0; i<sizeof(weight)/sizeof(weight[0]); i++){
+	for(int i=0; i<sizeof(weight)/sizeof(float); i++){
 		weight[i] = 0.0f;
+	}
+}
+
+Expression::Expression(char* tName, float* tWeight)
+{
+	name = tName;
+
+	for(int i=0; i<sizeof(weight)/sizeof(float); i++){
+		weight[i] = tWeight[i];
 	}
 }
 
