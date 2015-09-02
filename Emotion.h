@@ -14,6 +14,7 @@ public:
 
 	Expression getEmotion();
 	void saveEmotion(Expression exp);
+	void setEmotionAtTime(DWORD diff);
 
 };
 

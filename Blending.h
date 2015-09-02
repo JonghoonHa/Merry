@@ -23,11 +23,11 @@ public:
 
 	void setEmotion();
 	void setPronounciation(void);
-	void BlendWithEyeClosed(DWORD diff, Expression eyeclosed, vector<float> emotionWeight);
-	void blendingFunction(DWORD diff, Expression eyeclosed);
+	void BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight);
+	void blendingFunction(DWORD diff);
 
 
 private:
-	vector<float> setEmotionWeight();
+	vector<float> setEmotionWeight(DWORD diff);
 };
 

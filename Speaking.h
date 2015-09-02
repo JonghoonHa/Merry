@@ -28,7 +28,7 @@ public:
 
 	void transSentenceToIdx(void);
 	int matchPronounciationIdx(char letter);
-	int setCharAtTime(DWORD diff);	
+	void setCharAtTime(DWORD diff);	
 	void setWeightAtTime(DWORD diff);
 	void calCurrLook(void);
 

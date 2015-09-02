@@ -56,3 +56,10 @@ void Emotion::saveEmotion(Expression exp){
 	// 사용자가  Slider Control을 통하여 원하는 감정표정을 만들고 난 후, ADD버튼을 누르면, 사용자가 입력한 name과 각 컨트롤 바의 value값들이 Expression의 하나의 instance로 만들어 emotion변수에 추가.
 	emotions.push_back(exp);
 }
+
+void Emotion::setEmotionAtTime(DWORD diff){
+	// 해당 순간(block)의 근처에 표정 값이 있는지 판단한다.
+	// 문장 속 표정 태그(음수)가 있다면 가까이 있을수록 큰 표정 값을 가진다.
+
+
+}

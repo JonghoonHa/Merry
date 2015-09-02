@@ -39,26 +39,25 @@ void Blending::setPronounciation(void){
 	pronounciation = pView->speaking.getPronounciation();
 }
 
-void Blending::blendingFunction(DWORD diff, Expression eyeclosed){
+void Blending::blendingFunction(DWORD diff){
 
 	// emotion과 pronounciation을 blending시키는 알고리즘을 통해 최종 표정을 결정하여 반환해주는 함수
 
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
-	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
-	vector<float> emotionWeight = setEmotionWeight();
+	vector<float> emotionWeight = setEmotionWeight(diff);
+	float tempFinalExpWeight;
 
 	for(int i=0;i<pDoc->units.size();i++){
 
 		// 방향 - 거리 관계 적용
 		// 서로 다른 두 AU의 방향 관계가 180도에 가까울수록,
 		// Animation 작동시 Emotion에 해당하는 AU의 가중치가 낮아진다.
-		if(pronounciation.weight[i] > 0.0){
-			for(int j=i;j<pDoc->units.size();j++){
 
-				emotion.weight[j] *= pDoc->directionTable[i][j];
-			}
+		if(pronounciation.weight[i] > 0.0){
+			for(int j=i;j<pDoc->units.size();j++)
+				emotion.weight[j] *= pDoc->directionTable[i][j];		
 		}
 	}
 
@@ -67,19 +66,23 @@ void Blending::blendingFunction(DWORD diff, Expression eyeclosed){
 	/*----------------------------
 	눈깜빡임 효과 코드
 	---------------------------*/
-	BlendWithEyeClosed(diff, eyeclosed, emotionWeight);
+	BlendWithEyeClosed(diff, emotionWeight);
 
 	//////////////////////////////////////////////////////////////////////////////
 
 
 	for (int i = 0;i<pDoc->units.size();i++) {
 
-		// (입으로부터의 거리) 일반화 과정 적용
-		finalExpression.weight[i] = pronounciation.weight[i] * 1.0 + emotion_withEyeclose.weight[i];
+		tempFinalExpWeight = pronounciation.weight[i] * 1.0 + emotion_withEyeclose.weight[i];
+
+		if(tempFinalExpWeight > 100.0)	tempFinalExpWeight = 100.0;
+		else if(tempFinalExpWeight < 0.0)	tempFinalExpWeight = 0.0;
+
+		finalExpression.weight[i] = tempFinalExpWeight;
 	}
 }
 
-vector<float> Blending::setEmotionWeight(void){
+vector<float> Blending::setEmotionWeight(DWORD diff){
 
 	// 입으로부터 거리에 따른 Emotion Expression의 flat/event형 가중치 변화 적용
 	// 입으로부터 멀수록 animation 작동시 flat형 (animation과 무관하게 AU적용)
@@ -98,25 +101,25 @@ vector<float> Blending::setEmotionWeight(void){
 
 	for(int i=0; i<pDoc->units.size(); i++){
 
-		if(pView->diff < pView->speaking.speed * (pView->speaking.introBlockNum -1)){
+		if(diff < pView->speaking.speed * (pView->speaking.introBlockNum -1)){
 
 			// 처음 ~ 문장 시작 전 블럭
 			emotionWeight[i] = 1.0;
 		
-		}else if( (pView->diff >= pView->speaking.speed * (pView->speaking.introBlockNum -1))  && (pView->diff < pView->speaking.speed * pView->speaking.introBlockNum)){
+		}else if( (diff >= pView->speaking.speed * (pView->speaking.introBlockNum -1))  && (diff < pView->speaking.speed * pView->speaking.introBlockNum)){
 
 			// 말하기 바로 전 블럭
-			emotionWeight[i] = 1.0 - abs(((pView->diff - (pView->speaking.introBlockNum-1)* pView->speaking.speed) * (1.0 - pDoc->units[i].distFromMouth)) / pView->speaking.speed);
+			emotionWeight[i] = 1.0 - abs(((diff - (pView->speaking.introBlockNum-1)* pView->speaking.speed) * (1.0 - pDoc->units[i].distFromMouth)) / pView->speaking.speed);
 		
 
-		}else if(pView->diff >= (pView->speaking.introBlockNum + pView->speaking.sentence.size()) * pView->speaking.speed
-			&& pView->diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1) * pView->speaking.speed ){
+		}else if(diff >= (pView->speaking.introBlockNum + pView->speaking.sentence.size()) * pView->speaking.speed
+			&& diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1) * pView->speaking.speed ){
 
 			// 말 끝난 바로 다음 블럭
-			emotionWeight[i] = 1.0 - abs(((pView->diff - (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1)* pView->speaking.speed) * (1.0 - pDoc->units[i].distFromMouth)) / pView->speaking.speed);
+			emotionWeight[i] = 1.0 - abs(((diff - (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1)* pView->speaking.speed) * (1.0 - pDoc->units[i].distFromMouth)) / pView->speaking.speed);
 
-		}else if(pView->diff >= (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1) * pView->speaking.speed
-			&& pView->diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + pView->speaking.introBlockNum -1) * pView->speaking.speed){
+		}else if(diff >= (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1) * pView->speaking.speed
+			/*&& diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + pView->speaking.introBlockNum -1) * pView->speaking.speed*/){
 					
 			// 말 끝난 후 블럭 ~ 끝
 			emotionWeight[i] = 1.0;
@@ -132,7 +135,7 @@ vector<float> Blending::setEmotionWeight(void){
 	return emotionWeight;
 }
 
-void Blending::BlendWithEyeClosed(DWORD diff, Expression eyeClosed, vector<float> emotionWeight) {
+void Blending::BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight) {
 
 	/*
 
@@ -154,8 +157,13 @@ void Blending::BlendWithEyeClosed(DWORD diff, Expression eyeClosed, vector<float
 	항상 오른쪽 눈(weight[5])기준
 
 	*/
+	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
+	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
+	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
-	for (int i = 0;i < 16;i++) {
+	Expression eyeClosed = pView->emotion.emotions[0];
+
+	for (int i = 0;i < pDoc->units.size();i++) {
 		emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];
 	}
 
@@ -170,8 +178,8 @@ void Blending::BlendWithEyeClosed(DWORD diff, Expression eyeClosed, vector<float
 		//eyeStatus와 눈깜빡임 표정 블렌딩			
 		emotion_withEyeclose.weight[5] = w1*eyeStatus + w2*eyeClosed.weight[5];
 		emotion_withEyeclose.weight[6] = w1*eyeStatus + w2*eyeClosed.weight[6];
-		w1 -= 0.3;
-		w2 += 0.3;
+		w1 -= 0.1;
+		w2 += 0.1;
 
 		if (w2 >= 1.0) {
 			// 눈 뜨기로 전환
@@ -184,8 +192,8 @@ void Blending::BlendWithEyeClosed(DWORD diff, Expression eyeClosed, vector<float
 	else if (eyeClosedOn == 2) {
 
 		//눈 뜨기
-		w1 += 0.3;
-		w2 -= 0.3;
+		w1 += 0.1;
+		w2 -= 0.1;
 		emotion_withEyeclose.weight[5] = w1*eyeStatus + w2*eyeClosed.weight[5];
 		emotion_withEyeclose.weight[6] = w1*eyeStatus + w2*eyeClosed.weight[6];
 

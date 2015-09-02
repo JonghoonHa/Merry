@@ -38,6 +38,7 @@ public:
 	Expression tempExpression;
 	virtual void OnInitialUpdate();
 	bool addEmotionFlag;
+	int selectedEmotionIdx;
 	
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedButton1();

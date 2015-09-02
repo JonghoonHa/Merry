@@ -82,19 +82,19 @@ void Speaking::transSentenceToIdx(void)
 		transSentence[k] = matchPronounciationIdx(sentence[k]);
 	}
 
-	// 'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
-	for(int k=0;k<sentence.size()-3;k++){//?
-		 
-		if(sentence[k] == 'e' && 
-			(sentence[k+1] != ' ' && sentence[k+1] != '.' ) &&
-			(sentence[k+2] != ' ' && sentence[k+2] != '.' ) &&
-			(transSentence[k+3] != 1 && transSentence[k+3] != 0)){
-						
-				transSentence[k+1] = transSentence[k];
-				transSentence[k+2] = transSentence[k+3];
+	//// 'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
+	//for(int k=0;k<sentence.size()-3;k++){// 문장의 글자가 2개 이하일 때 오류 유발
+	//	 
+	//	if(sentence[k] == 'e' && 
+	//		(sentence[k+1] != ' ' && sentence[k+1] != '.' ) &&
+	//		(sentence[k+2] != ' ' && sentence[k+2] != '.' ) &&
+	//		(transSentence[k+3] != 1 && transSentence[k+3] != 0)){
+	//					
+	//			transSentence[k+1] = transSentence[k];
+	//			transSentence[k+2] = transSentence[k+3];
 
-		}
-	}
+	//	}
+	//}
 
 	// 'is'에서 s을 1로 제어
 	for(int k=1;k<sentence.size();k++){
@@ -125,11 +125,10 @@ void Speaking::transSentenceToIdx(void)
 	//문장에서 첫 모음(지정글자)이 나오기 전까지는 0으로 제어
 	for(int k=0;k<sentence.size()-1;k++){
 
-		if(this_condition_end == false && transSentence[k] == 1){
+		if(this_condition_end == false && transSentence[k] == 1)
 			transSentence[k] = 0;
-		}else{
-			this_condition_end = true;
-		}
+		else
+			this_condition_end = true;	
 	}
 
 	//'my'와 같이 끝이 y로 끝나는 것 1로 제어
@@ -157,14 +156,6 @@ void Speaking::transSentenceToIdx(void)
 	//	if(sentence[k] == ')'){
 	//		transSentence[k] = transSentence[k-1];
 	//	}
-	//}
-
-	//for(int k=0;k<sentence.size();k++){
-
-	//	FILE* fp = fopen("1111.txt","at+");
-	//	fprintf(fp,"%d   \n", transSentence[k] );
-	//	fclose(fp);
-
 	//}
 
 }
@@ -222,12 +213,14 @@ int Speaking::matchPronounciationIdx(char letter){
 }
 
 
-int Speaking::setCharAtTime(DWORD diff)
+void Speaking::setCharAtTime(DWORD diff)
 {
 	// 애니메이션 경과 시간을 input으로 받아서 이전, 현재, 다음에 어떤 글자를 말하는지를 계산하여 반환하는 함수
 	
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
+	ControllerView* controller = (ControllerView*)pFrame->m_wndSplitter.GetPane(0,1);
+	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
 	if(diff <= ( sentence.size() + (introBlockNum*2) ) * speed ){   
 	
@@ -259,41 +252,28 @@ int Speaking::setCharAtTime(DWORD diff)
 			
 		}else{
 
-			//------------------------------------------------------------------------------------ 나머지
+			// 문장 속 어느 글자
 				
 			preIdx = transSentence[diff/speed - introBlockNum - 1 ];	
 			currIdx = transSentence[diff/speed - introBlockNum ];	
 
 		}	
 
-		return currIdx;
-
 	}else{
 
 		//animation end 조건 
 		pView->animationFlag = false;
+		pView->firstDrawFlag = true;
 		pView->getStartTime = true;
 
 		pView->speaking.transSentence.clear();
 		pView->speaking.sentence.clear();
 
-		CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
-		pFrame->m_wndSplitter.SetActivePane(0, 1);
-		ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
-
-		// 애니메이션 끝난 후 default로 설정				
-		controller->expressionList.SetCurSel(0);
-
-		for(int i = 0; i < sizeof(controller->tempExpression.weight)/sizeof(float); i++){
-		
-			controller->tempExpression.weight[i] = pView->emotion.emotions[0].weight[i];
-		
-		}
-		// 애니메이션 끝나고 원래 표정으로 돌아가는 방법을 생각해보자.
+		// 애니메이션 끝난 후 이전 표정으로 돌아감			
+		controller->expressionList.SetCurSel(controller->selectedEmotionIdx-1);		
 
 	}	
 
-	return 0;
 }
 
 void Speaking::setWeightAtTime(DWORD diff)
@@ -320,6 +300,7 @@ void Speaking::calCurrLook(void){
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
+	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
 	Expression preExp;
 	Expression currExp;
@@ -333,7 +314,7 @@ void Speaking::calCurrLook(void){
 	if(currIdx<0)	currExp = pView->emotion.emotions[abs(currIdx)];
 	else	currExp = pronounciations[currIdx];
 	
-	for(int i=0;i<16;i++){ // 어떤 순간의 말하는 표정의 결과물. 이전 값과 현재 값의 조합.
+	for(int i=0;i<pDoc->units.size();i++){ // 어떤 순간의 말하는 표정의 결과물. 이전 값과 현재 값의 조합.
 
 		nowLook.weight[i] = preExp.weight[i] * preWeight + currExp.weight[i] * currWeight;
 

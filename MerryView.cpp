@@ -107,7 +107,7 @@ CMerryView::CMerryView()
 
 	animationFlag = false;
 	getStartTime = true;
-	firstDraw = true;
+	firstDrawFlag = true;
 
 	// 기타 -------------------------------------
 	M_PI=3.141592;
@@ -225,25 +225,7 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		return;
 	}
 
-	if(firstDraw){
-
-		blending.finalExpression.weight[0] = 50.0;
-		blending.finalExpression.weight[1] = 50.0;
-		blending.finalExpression.weight[5] = 10.0;
-		blending.finalExpression.weight[6] = 10.0;
-
-		firstDraw = false;
-
-		relocate(blending.finalExpression);
-	}
-
-	/*
-
-	animation codes
-
-	*/
-
-	if(animationFlag == true){
+	if(animationFlag){ // animation codes
 
 		if(getStartTime == true){
 
@@ -257,15 +239,24 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		nowTime = GetTickCount();
 		diff = nowTime - startTime;
 
-		//speaking.transSentenceToIdx();
-		int spkIdx = speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
+		speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
 
 		blending.setPronounciation();
 		blending.setEmotion();		
-		blending.blendingFunction(diff, emotion.emotions[0]);
-		relocate(blending.finalExpression);
+		blending.blendingFunction(diff);
+
+	}
+
+	if(firstDrawFlag || animationFlag){
+
+		if(firstDrawFlag){
+
+			firstDrawFlag = false;
+
+			blending.finalExpression = emotion.emotions[controller->selectedEmotionIdx];
+		}
 
 		controller->innerBrowRaiserR.SetPos(blending.finalExpression.weight[0]);
 		controller->innerBrowRaiserL.SetPos(blending.finalExpression.weight[1]);
@@ -284,8 +275,8 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		controller->lipsPart.SetPos(blending.finalExpression.weight[14]);
 		controller->stickOutLowerLip.SetPos(blending.finalExpression.weight[15]);
 
+		relocate(blending.finalExpression);
 	}
-	
 }
 
 

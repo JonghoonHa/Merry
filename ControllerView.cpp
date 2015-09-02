@@ -18,7 +18,7 @@ IMPLEMENT_DYNCREATE(ControllerView, CFormView)
 ControllerView::ControllerView()
 	: CFormView(ControllerView::IDD)
 {
-
+	selectedEmotionIdx = 1;
 }
 
 ControllerView::~ControllerView()
@@ -47,8 +47,6 @@ void ControllerView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SLIDER16, stickOutLowerLip);
 	DDX_Control(pDX, IDC_COMBO1, expressionList);
 
-
-	
 }
 
 BEGIN_MESSAGE_MAP(ControllerView, CFormView)
@@ -83,6 +81,9 @@ void ControllerView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+
+	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
+	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	
 	innerBrowRaiserR.SetRange(0,100);	//slider 전체 크기
 	innerBrowRaiserR.SetPos(0);		//slider 초기 위치
@@ -132,28 +133,18 @@ void ControllerView::OnInitialUpdate()
 	stickOutLowerLip.SetRange(0, 100);
 	stickOutLowerLip.SetPos(0);
 
-	//----------------------------------------------------------------------emotion 미리 세팅
-	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
-	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
+	// emotion 미리 세팅
 		
-	for(int i=0;i<pView->emotion.emotions.size();i++){
+	for(int i=1;i<pView->emotion.emotions.size();i++){
 		
-		/*
-		눈감기표정의 경우 보이지 않게 함(i==0)
-		*/
+		// i가 1부터인 이유 : 눈감기표정의 경우 보이지 않게 함
+		
+		Expression temp = pView->emotion.emotions[i];
+		expressionList.AddString(temp.name);
 
-		if (i != 0) {
-			Expression temp = pView->emotion.emotions[i];
-			expressionList.AddString(temp.name);
-		}
 	}
 
 	expressionList.SetCurSel(0);
-
-
-	
-	//---------------------------------------------------------------------------
-
 
 }
 
@@ -320,43 +311,20 @@ void ControllerView::OnCbnSelchangeCombo1()
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
-
-	CString name;
-	GetDlgItemText(IDC_COMBO1, name);
-
-	int id;
-	for(int i=0;i<pView->emotion.emotions.size();i++){
-
-		if(name == pView->emotion.emotions[i].name){
-			id = i;
-			break;
-		}
-	}	
-
-	innerBrowRaiserR.SetPos(pView->emotion.emotions[id].weight[0]);
-	innerBrowRaiserL.SetPos(pView->emotion.emotions[id].weight[1]);
-	outerBrowRaiserR.SetPos(pView->emotion.emotions[id].weight[2]);
-	outerBrowRaiserL.SetPos(pView->emotion.emotions[id].weight[3]);
-	browLowerer.SetPos(pView->emotion.emotions[id].weight[4]);
-	eyeCloseR.SetPos(pView->emotion.emotions[id].weight[5]);
-	eyeCloseL.SetPos(pView->emotion.emotions[id].weight[6]);
-	cheekRaiserR.SetPos(pView->emotion.emotions[id].weight[7]);
-	cheekRaiserL.SetPos(pView->emotion.emotions[id].weight[8]);
-	noseWrinkler.SetPos(pView->emotion.emotions[id].weight[9]);
-	lipCornerPullerR.SetPos(pView->emotion.emotions[id].weight[10]);
-	lipCornerPullerL.SetPos(pView->emotion.emotions[id].weight[11]);
-	chinRaiser.SetPos(pView->emotion.emotions[id].weight[12]);
-	lipPuckerer.SetPos(pView->emotion.emotions[id].weight[13]);
-	lipsPart.SetPos(pView->emotion.emotions[id].weight[14]);
-	stickOutLowerLip.SetPos(pView->emotion.emotions[id].weight[15]);
 	
+	int idx;
+	CString name;
+	GetDlgItemText(IDC_COMBO1, name);	
 
-	for(int i=0; i<sizeof(pView->emotion.emotions[0].weight)/sizeof(float);i++){
-		tempExpression.weight[i] = pView->emotion.emotions[id].weight[i];
+	for(idx=0; idx<pView->emotion.emotions.size(); idx++){
+		if(name == pView->emotion.emotions[idx].name)	break;	
 	}
 
-	pView->relocate(tempExpression);
+	selectedEmotionIdx = idx;
 
-	
+	pView->firstDrawFlag = true;
+
+	pView->relocate(pView->emotion.emotions[idx]);
+
 }
 

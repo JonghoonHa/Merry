@@ -115,7 +115,7 @@ public:
 	// 애니메이션
 	bool getStartTime;
 	bool animationFlag;
-	bool firstDraw;
+	bool firstDrawFlag;
 
 	DWORD startTime;
 	DWORD nowTime;
