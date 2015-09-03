@@ -49,6 +49,8 @@ protected:
 #endif // SHARED_HANDLERS
 public:
 	float speed;
+	int introBlockNum;
+	//int introTime;
 	vector<ActionUnit> units;
 	vector<vector<float>> directionTable;
 	

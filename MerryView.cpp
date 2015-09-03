@@ -115,7 +115,6 @@ CMerryView::CMerryView()
 	lButton = false;
 	rButton = false;
 	mButton = false;
-
 }
 
 CMerryView::~CMerryView()
@@ -239,9 +238,11 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		nowTime = GetTickCount();
 		diff = nowTime - startTime;
 
-		speaking.setCharAtTime(diff); // 기본 표정 + 문장 표정 하려면 여기서 현재 idx값을 가져와야 하네! 이 값을 emotion system으로 보내주어야 한다.
+		speaking.setCharAtTime(diff); 
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
+
+		//emotion.setEmotionWeightAtTime(diff, speaking.transSentence);
 
 		blending.setPronounciation();
 		blending.setEmotion();		
@@ -325,6 +326,11 @@ void CMerryView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
+	CMerryDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	m_pDC = new CClientDC(this);
 
@@ -376,13 +382,10 @@ void CMerryView::OnInitialUpdate()
 	glLinkProgram(pro);				//shader가 연결된 프로그램을 실행준비함
 	glUseProgram(pro);				//프로그램을 실행하기
 
-
-	/////////////////////////////////////////////////////////////////////
-	ReadfromObj();	//obj파일 읽어들이기
-	/////////////////////////////////////////////////////////////////////
+	/* Object Loading */
+	ReadfromObj();
 	
-	/* Texture loading */
-
+	/* Texture Loading */
 	glGenTextures(5, textures);
 
 	int width, height;
@@ -527,6 +530,15 @@ void CMerryView::OnInitialUpdate()
 
 	// 입으로부터 각 AU의 거리
 	setDistFromMouth();
+
+	/* 각 모듈 초기화 */
+	Emotion _emotion(pDoc->speed, pDoc->introBlockNum);
+	Speaking _speaking(pDoc->speed, pDoc->introBlockNum);
+	Blending _blending(pDoc->speed, pDoc->introBlockNum);
+
+	emotion = _emotion;
+	speaking = _speaking;
+	blending = _blending;
 
 }
 

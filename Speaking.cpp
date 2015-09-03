@@ -3,12 +3,12 @@
 #include "MerryView.h"
 #include "ControllerView.h"
 
-Speaking::Speaking(void)
+Speaking::Speaking(void){
+}
+Speaking::Speaking(float _speed, int _introBlockNum)
 {
-	speed = 200.0;
-	
-	introBlockNum = 10;
-	introTime = introBlockNum * speed;
+	speed = _speed;
+	introBlockNum = _introBlockNum;
 
 	preIdx = 0; currIdx = 0; nextIdx = 0;
 	preWeight = 0.0; currWeight = 0.0; nextWeight = 0.0;
@@ -220,31 +220,34 @@ void Speaking::setCharAtTime(DWORD diff)
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	ControllerView* controller = (ControllerView*)pFrame->m_wndSplitter.GetPane(0,1);
-	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
+
+	const int introTime = introBlockNum * speed;
+	int currBlockNum = diff/speed;
 
 	if(diff <= ( sentence.size() + (introBlockNum*2) ) * speed ){   
 	
-		if((int)diff < introTime){
+		if(/*(int)diff < introTime*/currBlockNum<introBlockNum){
 
 			// 맨 처음 공백 block들
 			preIdx = matchPronounciationIdx('0');
 			currIdx = matchPronounciationIdx('0');
 
-		}else if((int)diff >= introTime && (int)diff <= introTime + speed){
+		}else if(/*(int)diff >= introTime && (int)diff <= introTime + speed*/currBlockNum>=introBlockNum && currBlockNum< introBlockNum+1){
 
 			// 맨 첫글자
 			preIdx = matchPronounciationIdx('0');
 			currIdx = transSentence[0];
 	
-		}else if( (int)diff >= ((sentence.size() + introBlockNum) * speed)
-			&& ( (int)diff < ((sentence.size() + introBlockNum + 1) * speed) )){
+		}else if(/* (int)diff >= ((sentence.size() + introBlockNum) * speed)
+			&& ( (int)diff < ((sentence.size() + introBlockNum + 1) * speed) )*/
+			currBlockNum >= introBlockNum + sentence.size() && currBlockNum<introBlockNum + sentence.size()+1){
 
 			// 맨 마지막 글자 다음 block
 
 			preIdx = transSentence[diff/speed - introBlockNum - 1 ];	
 			currIdx= matchPronounciationIdx('0');
 
-		}else if( (int)diff >= ((sentence.size() + introBlockNum + 1) * speed) ){
+		}else if( /*(int)diff >= ((sentence.size() + introBlockNum + 1) * speed)*/currBlockNum >= introBlockNum + sentence.size()+1 ){
 
 			// 맨 마지막 공백 block들
 			preIdx = matchPronounciationIdx('0');
@@ -279,19 +282,18 @@ void Speaking::setCharAtTime(DWORD diff)
 void Speaking::setWeightAtTime(DWORD diff)
 {
 
-	if(diff%(int)speed <= speed/2.0){
+	if(diff%(int)speed <= speed/2.0){ // 한 block의 앞쪽 절반
 
-		preWeight = - (abs( (float)(diff%(int)speed) + speed/2.0) * 1.0/speed) + 1.0;
-		currWeight = - (abs( (float)(diff%(int)speed) - speed/2.0 ) * 1.0/speed) + 1.0;
+		preWeight = 1.0 - abs( (float)(diff%(int)speed) + speed/2.0) / speed;
+		currWeight =1.0 - abs( (float)(diff%(int)speed) - speed/2.0 ) / speed;
 
-	}else{
+	}else{ // 나머지 절반
 
 		preWeight = 0.0;
 		currWeight = 1.0;
 
 	}
-			
-	
+
 }
 
 

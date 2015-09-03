@@ -32,10 +32,11 @@ CMerryDoc::CMerryDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 
-	speed = 0.0f;
-
-	//-----------------------------------------------------------------
 	ActionUnit temp;
+
+	speed = 200.0;
+	introBlockNum = 10;
+	//introTime = introBlockNum * speed;
 
 	// units[0] : innerBrowRaiserR
 	// 안쪽 눈썹 오른쪽

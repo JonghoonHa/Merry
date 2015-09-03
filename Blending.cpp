@@ -6,14 +6,20 @@
 
 Blending::Blending(void)
 {
+}
+
+Blending::Blending(float _speed, int _introBlockNum)
+{
 	eyeClosedOn = 0;
 	eyeStatus = 0.0f;
 	preDiff = 0;
 
 	w1 = 1.0;
 	w2 = 0.0;
-}
 
+	speed = _speed;
+	introBlockNum = _introBlockNum;
+}
 
 Blending::~Blending(void)
 {
@@ -94,31 +100,28 @@ vector<float> Blending::setEmotionWeight(DWORD diff){
 
 	vector<float> emotionWeight;
 
-	// emotionWeight 초기화
-	for(int i=0; i<pDoc->units.size(); i++){
-		emotionWeight.push_back(0.0);
-	}
-
 	for(int i=0; i<pDoc->units.size(); i++){
 
-		if(diff < pView->speaking.speed * (pView->speaking.introBlockNum -1)){
+		emotionWeight.push_back(0.0); // emotionWeight 초기화
+
+		if(diff < speed * (introBlockNum -1)){
 
 			// 처음 ~ 문장 시작 전 블럭
 			emotionWeight[i] = 1.0;
 		
-		}else if( (diff >= pView->speaking.speed * (pView->speaking.introBlockNum -1))  && (diff < pView->speaking.speed * pView->speaking.introBlockNum)){
+		}else if( (diff >= speed * (introBlockNum -1))  && (diff < speed * introBlockNum)){
 
 			// 말하기 바로 전 블럭
-			emotionWeight[i] = 1.0 - abs(((diff - (pView->speaking.introBlockNum-1)* pView->speaking.speed) * (1.0 - pDoc->units[i].distFromMouth)) / pView->speaking.speed);
+			emotionWeight[i] = 1.0 - abs(((diff - (introBlockNum-1)* speed) * (1.0 - pDoc->units[i].distFromMouth)) / speed);
 		
 
-		}else if(diff >= (pView->speaking.introBlockNum + pView->speaking.sentence.size()) * pView->speaking.speed
-			&& diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1) * pView->speaking.speed ){
+		}else if(diff >= (introBlockNum + pView->speaking.sentence.size()) * speed
+			&& diff < (introBlockNum + pView->speaking.sentence.size() + 1) * speed ){
 
 			// 말 끝난 바로 다음 블럭
-			emotionWeight[i] = 1.0 - abs(((diff - (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1)* pView->speaking.speed) * (1.0 - pDoc->units[i].distFromMouth)) / pView->speaking.speed);
+			emotionWeight[i] = 1.0 - abs(((diff - (introBlockNum + pView->speaking.sentence.size() + 1)* speed) * (1.0 - pDoc->units[i].distFromMouth)) / speed);
 
-		}else if(diff >= (pView->speaking.introBlockNum + pView->speaking.sentence.size() + 1) * pView->speaking.speed
+		}else if(diff >= (introBlockNum + pView->speaking.sentence.size() + 1) * speed
 			/*&& diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + pView->speaking.introBlockNum -1) * pView->speaking.speed*/){
 					
 			// 말 끝난 후 블럭 ~ 끝
@@ -167,7 +170,7 @@ void Blending::BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight) {
 		emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];
 	}
 
-	if (diff - preDiff >= 5000 && eyeClosedOn == 0) {
+	if (diff - preDiff >= 3000 && eyeClosedOn == 0) {
 
 		eyeClosedOn = 1;	//눈깜빡임 효과 시작
 		eyeStatus = emotion.weight[5] * emotionWeight[5];

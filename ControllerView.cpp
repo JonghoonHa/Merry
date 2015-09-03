@@ -310,7 +310,6 @@ void ControllerView::OnCbnSelchangeCombo1()
 
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
-	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 	
 	int idx;
 	CString name;

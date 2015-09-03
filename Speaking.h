@@ -14,13 +14,11 @@ public:
 	bool emotionTagFlag;
 
 	Expression nowLook;
-	int introBlockNum;
-	int introTime;
-
+	
 	int preIdx, currIdx, nextIdx;
 	float preWeight, currWeight, nextWeight;
 
-	float speed;
+	
 
 	bool this_condition_end;
 
@@ -33,6 +31,11 @@ public:
 	void calCurrLook(void);
 
 	Speaking(void);
+	Speaking(float _speed, int _introBlockNum);
 	~Speaking(void);
+
+private:
+	int introBlockNum;
+	float speed;
 };
 
