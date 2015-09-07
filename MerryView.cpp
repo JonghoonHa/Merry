@@ -242,7 +242,7 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		speaking.setWeightAtTime(diff);
 		speaking.calCurrLook();
 
-		//emotion.setEmotionWeightAtTime(diff, speaking.transSentence);
+		emotion.setEmotionWeightAtTime(diff, speaking.transSentence);
 
 		blending.setPronounciation();
 		blending.setEmotion();		

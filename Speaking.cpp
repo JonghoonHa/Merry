@@ -310,11 +310,8 @@ void Speaking::calCurrLook(void){
 	// idx가 음수인 경우는 말 대신 문장 내 표정 태그에 의해 들어온 표정 값이다.
 	// 그러므로 emotion module에서 표정을 가져와 spk 표정으로 반환한다.
 
-	if(preIdx<0)	preExp = pView->emotion.emotions[abs(preIdx)];
-	else	preExp = pronounciations[preIdx];
-
-	if(currIdx<0)	currExp = pView->emotion.emotions[abs(currIdx)];
-	else	currExp = pronounciations[currIdx];
+	if(preIdx >= 0) preExp = pronounciations[preIdx];
+	if(currIdx >= 0) currExp = pronounciations[currIdx];
 	
 	for(int i=0;i<pDoc->units.size();i++){ // 어떤 순간의 말하는 표정의 결과물. 이전 값과 현재 값의 조합.
 

@@ -53,7 +53,6 @@ void Blending::blendingFunction(DWORD diff){
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
 	vector<float> emotionWeight = setEmotionWeight(diff);
-	float tempFinalExpWeight;
 
 	for(int i=0;i<pDoc->units.size();i++){
 
@@ -79,12 +78,11 @@ void Blending::blendingFunction(DWORD diff){
 
 	for (int i = 0;i<pDoc->units.size();i++) {
 
-		tempFinalExpWeight = pronounciation.weight[i] * 1.0 + emotion_withEyeclose.weight[i];
+		finalExpression.weight[i] = pronounciation.weight[i] + emotion_withEyeclose.weight[i];
 
-		if(tempFinalExpWeight > 100.0)	tempFinalExpWeight = 100.0;
-		else if(tempFinalExpWeight < 0.0)	tempFinalExpWeight = 0.0;
+		if(finalExpression.weight[i] > 100.0)	finalExpression.weight[i] = 100.0;
+		else if(finalExpression.weight[i] < 0.0)	finalExpression.weight[i] = 0.0;
 
-		finalExpression.weight[i] = tempFinalExpWeight;
 	}
 }
 

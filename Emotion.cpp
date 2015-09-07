@@ -43,7 +43,9 @@ Expression Emotion::getEmotion(){
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();
 
-	return this->emotions[controller->selectedEmotionIdx];
+	//return this->emotions[controller->selectedEmotionIdx];
+
+	return finalExpression;
 }
  
 void Emotion::saveEmotion(Expression exp){
@@ -61,26 +63,43 @@ void Emotion::setEmotionWeightAtTime(DWORD diff, vector<int> transSentence){
 	ControllerView* controller = (ControllerView*)pFrame->GetActiveView();	
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
-	int currBlockNum = diff/speed-1;
-	float weight = 0.0;
+	int currBlockNum = diff/speed, i, j;
+	float weight, weightSum = 0.0;
 
-	//Expression basicEmotion = this->emotions[controller->selectedEmotionIdx];
+	Expression basicEmotion = this->emotions[controller->selectedEmotionIdx];
 	Expression tagEmotion;
 
-	if(currBlockNum >= introBlockNum && currBlockNum < transSentence.size() + introBlockNum*2){
-
-		for(int i=currBlockNum-2; i<=currBlockNum+2; i++){
-	
-			if(i-introBlockNum >=0 && transSentence[i-introBlockNum] < 0){
-
-				if(i <= currBlockNum)	weight = (diff - i*speed) / (2*speed);
-				else	weight = (diff - (i+4)*speed) / ((-2)*speed);
+	if(currBlockNum >= 0 && currBlockNum < transSentence.size() + introBlockNum*2){
+		
+		for(i=-3; i<3; i++){ // 해당 블록 앞, 뒤로 세 칸까지 탐색하여 표정 태그를 검색
 			
-				for(int j=0; j<pDoc->units.size(); j++)
-					tagEmotion.weight[j] += this->emotions[abs(transSentence[i-introBlockNum])].weight[j] * weight;
-			}
+			if(currBlockNum+i >= introBlockNum && currBlockNum+i < transSentence.size() + introBlockNum-1){
+				
+				if(transSentence[currBlockNum-introBlockNum+i+1]<0){
 
+					weight = 0.0;
+
+					// 시간 변화에 따른 가중치 계산
+					if(i>=0)	weight = (float)diff/(3*speed) - (float)(currBlockNum+i-2)/3;
+					else	weight = (float)(-1)*diff/(3*speed) + (float)(currBlockNum+i+4)/3 ;
+
+					weightSum += weight;
+
+					// 검색한 표정 태그를 합쳐 tagEmotion 생성
+					for(j=0; j<pDoc->units.size(); j++)
+							tagEmotion.weight[j] += this->emotions[abs(transSentence[currBlockNum-introBlockNum+i+1])].weight[j] * weight;
+				
+				}
+
+			}
+		
 		}
+
+		// 기본 표정과 문장 태그 표정의 blending
+		if(weightSum > 1.0)	weightSum = 1.0;
+
+		for(i=0; i<pDoc->units.size(); i++)
+			finalExpression.weight[i] = basicEmotion.weight[i] * (1.0 - weightSum) + tagEmotion.weight[i] * weightSum;
 
 	}
 
