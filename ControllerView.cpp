@@ -45,6 +45,7 @@ void ControllerView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SLIDER14, lipPuckerer);
 	DDX_Control(pDX, IDC_SLIDER15, lipsPart);
 	DDX_Control(pDX, IDC_SLIDER16, stickOutLowerLip);
+	DDX_Control(pDX, IDC_SLIDER17, speed);
 	DDX_Control(pDX, IDC_COMBO1, expressionList);
 
 }
@@ -85,8 +86,11 @@ void ControllerView::OnInitialUpdate()
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	
-	innerBrowRaiserR.SetRange(0,100);	//slider 전체 크기
-	innerBrowRaiserR.SetPos(0);		//slider 초기 위치
+	speed.SetRange(0,100);	//slider 전체 크기
+	speed.SetPos(50);		//slider 초기 위치
+
+	innerBrowRaiserR.SetRange(0,100);
+	innerBrowRaiserR.SetPos(0);
 
 	innerBrowRaiserL.SetRange(0,100);
 	innerBrowRaiserL.SetPos(0);
@@ -160,7 +164,16 @@ void ControllerView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	if(pScrollBar){
 		
 		// 어떤 슬라이더인지 검사
-		if(pScrollBar == (CScrollBar*)&innerBrowRaiserR){
+		if(pScrollBar == (CScrollBar*)&speed){
+
+			nPos = speed.GetPos(); //슬라이더의 위치를 검사
+
+			if(nPos>70)
+				int a = 0;
+
+			pDoc->speed =  400.0 - 400.0 * (float)nPos/100.0;
+						
+		}else if(pScrollBar == (CScrollBar*)&innerBrowRaiserR){
 
 			nPos = innerBrowRaiserR.GetPos(); //슬라이더의 위치를 검사
 

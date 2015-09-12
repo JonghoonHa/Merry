@@ -56,14 +56,6 @@ protected:
 
 public:
 
-	GLuint pro;
-	GLuint textures[5];
-
-	//카메라변수
-	GLfloat pos[3];
-	GLfloat lookAt[3];
-	GLfloat up[3];
-
 	// 카메라 시점 변환
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
@@ -77,6 +69,42 @@ public:
 	bool mButton;
 	bool rButton;
 	CPoint mouse_point;
+
+	
+	// 파일 read
+	char* ReadFromFile(char* filename);
+	void ReadfromObj(void);
+	
+	virtual void OnInitialUpdate();	
+	void relocate(Expression totalExpression);
+	void putAUInfo();
+
+	// 선언
+	vector <Box> box;
+	GLdouble M_PI;
+
+	Emotion emotion;
+	Speaking speaking;
+	Blending blending;
+	
+	// 애니메이션
+	bool getStartTime;
+	bool animationFlag;
+	bool firstDrawFlag;
+
+	DWORD startTime;
+	DWORD nowTime;
+	DWORD diff;
+
+private:	
+
+	GLuint pro;
+	GLuint textures[5];
+
+	//카메라변수
+	GLfloat pos[3];
+	GLfloat lookAt[3];
+	GLfloat up[3];
 
 	// 빛 변수
 	GLfloat lightPosition[4];
@@ -93,41 +121,11 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	void Perspective(const GLfloat fovy, const GLfloat aspect,  const GLfloat zNear, const GLfloat zFar, GLfloat* mat);
 
-	// 파일 read
-	char* ReadFromFile(char* filename);
-	void ReadfromObj(void);
-	
-	virtual void OnInitialUpdate();	
-	void relocate(Expression totalExpression);
-	void putAUInfo();
-
-	// 선언
-	vector <Box> box;
-	GLdouble M_PI;
-
-	//---------------------
-	Emotion emotion;
-	Speaking speaking;
-	Blending blending;
-	//---------------------
-	
-	
-	// 애니메이션
-	bool getStartTime;
-	bool animationFlag;
-	bool firstDrawFlag;
-
-	DWORD startTime;
-	DWORD nowTime;
-	DWORD diff;
-
-private:	
+	// 시스템 구현
 	void moveLips(int point, int au, glm::vec3 vector);
 	void setDirTable();
-
 	float getLength(glm::vec3 vector);
 	float getInnerProduct(glm::vec3 vec1, glm::vec3 vec2);
-
 	void setDistFromMouth();
 	glm::vec3 getMidPoint(vector<int> points);
 	float getDistance(glm::vec3 p1, glm::vec3 p2);

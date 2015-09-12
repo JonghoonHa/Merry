@@ -214,8 +214,16 @@ CMerryDoc::CMerryDoc()
 	// units[7] : cheekRaiserR
 	// 오른쪽 볼
 	temp.auNum = 7;
-	temp.actionPoint.push_back(1148);
+	temp.actionPoint.push_back(1344);
+	temp.moveVector.push_back(glm::vec3(2.0,10.0,3.0));
+	temp.distLimit.push_back(700.0);
+
+	temp.actionPoint.push_back(1117);
 	temp.moveVector.push_back(glm::vec3(2.0,6.0,3.0));
+	temp.distLimit.push_back(450.0);
+
+	temp.actionPoint.push_back(866);
+	temp.moveVector.push_back(glm::vec3(-7.0,10.0,3.0));
 	temp.distLimit.push_back(600.0);
 
 	units.push_back(temp);
@@ -228,8 +236,16 @@ CMerryDoc::CMerryDoc()
 	// units[8] : cheekRaiserL
 	// 왼쪽 볼
 	temp.auNum = 8;
-	temp.actionPoint.push_back(287);
-	temp.moveVector.push_back(glm::vec3(-2.0,6.0,3.0));
+	temp.actionPoint.push_back(286);
+	temp.moveVector.push_back(glm::vec3(2.0,10.0,3.0));
+	temp.distLimit.push_back(700.0);
+
+	temp.actionPoint.push_back(254);
+	temp.moveVector.push_back(glm::vec3(2.0,6.0,3.0));
+	temp.distLimit.push_back(450.0);
+
+	temp.actionPoint.push_back(443);
+	temp.moveVector.push_back(glm::vec3(7.0,10.0,3.0));
 	temp.distLimit.push_back(600.0);
 
 	units.push_back(temp);

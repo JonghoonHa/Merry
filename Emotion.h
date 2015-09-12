@@ -8,12 +8,11 @@ class Emotion
 {
 public:
 	Emotion(void);
-	Emotion(float _speed, int _introBlockNum);
 	~Emotion(void);
 
 	vector<Expression> emotions;
-	Expression finalExpression;
-
+	
+	void initialUpdate(float speed, int introBlockNum);
 	Expression getEmotion();
 	void saveEmotion(Expression exp);
 	void setEmotionWeightAtTime(DWORD diff, vector<int> transSentence);
@@ -22,6 +21,7 @@ public:
 private:
 	float speed;
 	int introBlockNum;
+	Expression finalExpression;
 	
 };
 

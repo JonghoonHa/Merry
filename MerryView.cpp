@@ -169,7 +169,11 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 	
 	glEnable(GL_DEPTH_TEST); 
 
-	for(int i=0;i<box.size();i++){
+	for(int i=28;i<box.size();i++){
+
+		// 잇몸, 치아 안보이게 하기. 발표용
+		if(i==30)
+			continue;
 
 		if(i <= 27){
 			glActiveTexture(GL_TEXTURE0);
@@ -231,6 +235,10 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 			// 애니메이션 시작 시각 기록
 			startTime = GetTickCount();
 			getStartTime = false;
+
+			emotion.initialUpdate(pDoc->speed, pDoc->introBlockNum);
+			speaking.initialUpdate(pDoc->speed, pDoc->introBlockNum);
+			blending.initialUpdate(pDoc->speed, pDoc->introBlockNum);
 
 			speaking.transSentenceToIdx();
 		}
@@ -471,7 +479,11 @@ void CMerryView::OnInitialUpdate()
 	///////////////////////////////////////////////////////////////////////////////
 
 
-	for(int i=0;i<box.size();i++){	
+	for(int i=28;i<box.size();i++){	
+
+		// 잇몸, 치아 안보이게 하기. 발표용
+		if(i==30)
+			continue;
 
 		if(i <= 27){
 			glActiveTexture(GL_TEXTURE0);
@@ -530,15 +542,6 @@ void CMerryView::OnInitialUpdate()
 
 	// 입으로부터 각 AU의 거리
 	setDistFromMouth();
-
-	/* 각 모듈 초기화 */
-	Emotion _emotion(pDoc->speed, pDoc->introBlockNum);
-	Speaking _speaking(pDoc->speed, pDoc->introBlockNum);
-	Blending _blending(pDoc->speed, pDoc->introBlockNum);
-
-	emotion = _emotion;
-	speaking = _speaking;
-	blending = _blending;
 
 }
 
@@ -1312,20 +1315,22 @@ void CMerryView::putAUInfo(void)
 				pow(double(box[31].currentPos[i].z - box[31].currentPos[pDoc->units[7].actionPoint[j]].z), 2);			
 
 			dist[j] = distance;
+
+			temp.auNum = 7;
+			limit = pDoc->units[7].distLimit[j];
+
+			if(dist[j] <= limit){
+
+				//weight값 계산_(AP와의 거리비율)
+						
+				temp.moveVector = pDoc->units[7].moveVector[j];
+				temp.weight = ((limit - dist[j]) * 1.0/limit);
+
+				box[31].pointInfo[i].push_back(temp);
+			}
 		}
 		
-		temp.auNum = 7;
-		limit = pDoc->units[7].distLimit[0];
-
-		if(dist[0] <= limit){
-
-			//weight값 계산_(AP와의 거리비율)
-						
-			temp.moveVector = pDoc->units[7].moveVector[0];
-			temp.weight = ((limit - dist[0]) * 1.0/limit);
-
-			box[31].pointInfo[i].push_back(temp);
-		}
+		
 
 		/////////////////////////////////////////////////
 
@@ -1337,20 +1342,22 @@ void CMerryView::putAUInfo(void)
 				pow(double(box[31].currentPos[i].z - box[31].currentPos[pDoc->units[8].actionPoint[j]].z), 2);			
 
 			dist[j] = distance;
+
+			temp.auNum = 8;
+			limit = pDoc->units[8].distLimit[j];
+
+			if(dist[j] <= limit){
+
+				//weight값 계산_(AP와의 거리비율)
+						
+				temp.moveVector = pDoc->units[8].moveVector[j];
+				temp.weight = ((limit - dist[j]) * 1.0/limit);
+
+				box[31].pointInfo[i].push_back(temp);
+			}
 		}
 		
-		temp.auNum = 8;
-		limit = pDoc->units[8].distLimit[0];
-
-		if(dist[0] <= limit){
-
-			//weight값 계산_(AP와의 거리비율)
-						
-			temp.moveVector = pDoc->units[8].moveVector[0];
-			temp.weight = ((limit - dist[0]) * 1.0/limit);
-
-			box[31].pointInfo[i].push_back(temp);
-		}
+		
 
 		/////////////////////////////////////////////////
 
@@ -1900,11 +1907,10 @@ void CMerryView::setDirTable(){
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
 	// table 생성 & 초기화
-	int auSize = pDoc->units.size();
 
-	for(int i=0; i<auSize; i++){
+	for(int i=0; i<pDoc->units.size(); i++){
 		vector<float> row;
-		for(int j=0; j<auSize; j++){
+		for(int j=0; j<pDoc->units.size(); j++){
 			row.push_back(1.0f);
 		}
 		pDoc->directionTable.push_back(row);
@@ -1914,9 +1920,11 @@ void CMerryView::setDirTable(){
 
 	for(int i=0; i<box[31].pointInfo.size(); i++){
 		for(int p=0; p<box[31].pointInfo[i].size(); p++){
-			for(int q=p+1; q<box[31].pointInfo[i].size(); q++){
 
-				EffectedAU au1 = box[31].pointInfo[i][p];
+			EffectedAU au1 = box[31].pointInfo[i][p];
+
+			for(int q=p+1; q<box[31].pointInfo[i].size(); q++){
+				
 				EffectedAU au2 = box[31].pointInfo[i][q];
 
 				// 두 벡터를 내적
@@ -1931,7 +1939,7 @@ void CMerryView::setDirTable(){
 				float result = cos(radian/2);
 
 				// 결과값이 가장 낮은 것을 선택
-				if(pDoc->directionTable[au1.auNum][au2.auNum] > result){
+				if(pDoc->directionTable[au1.auNum][au2.auNum] >result){
 						pDoc->directionTable[au1.auNum][au2.auNum] = result;
 						pDoc->directionTable[au2.auNum][au1.auNum] = result;
 				}
@@ -1965,6 +1973,7 @@ float CMerryView::getInnerProduct(glm::vec3 vec1, glm::vec3 vec2){
 
 void CMerryView::setDistFromMouth(void){
 	// 입으로부터 각 AU의 거리
+	// 입에서 가까울수록 값이 낮다.
 
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();

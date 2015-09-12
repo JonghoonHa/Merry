@@ -7,23 +7,11 @@ class Speaking
 {
 public:	
 	vector<Expression> pronounciations;
-
 	vector<char> sentence;
 	vector<int> transSentence;
-
-	bool emotionTagFlag;
-
-	Expression nowLook;
 	
-	int preIdx, currIdx, nextIdx;
-	float preWeight, currWeight, nextWeight;
-
-	
-
-	bool this_condition_end;
-
+	void initialUpdate(float speed, int introBlockNum);
 	Expression getPronounciation(void);
-
 	void transSentenceToIdx(void);
 	int matchPronounciationIdx(char letter);
 	void setCharAtTime(DWORD diff);	
@@ -31,11 +19,15 @@ public:
 	void calCurrLook(void);
 
 	Speaking(void);
-	Speaking(float _speed, int _introBlockNum);
 	~Speaking(void);
 
 private:
+	int preIdx, currIdx;
+	float preWeight, currWeight;
 	int introBlockNum;
 	float speed;
+	bool emotionTagFlag;
+	bool this_condition_end;
+	Expression nowLook;
 };
 

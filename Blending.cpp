@@ -6,10 +6,6 @@
 
 Blending::Blending(void)
 {
-}
-
-Blending::Blending(float _speed, int _introBlockNum)
-{
 	eyeClosedOn = 0;
 	eyeStatus = 0.0f;
 	preDiff = 0;
@@ -17,14 +13,18 @@ Blending::Blending(float _speed, int _introBlockNum)
 	w1 = 1.0;
 	w2 = 0.0;
 
-	speed = _speed;
-	introBlockNum = _introBlockNum;
 }
 
 Blending::~Blending(void)
 {
 }
 
+void Blending::initialUpdate(float speed, int introBlockNum){
+
+	this->speed = speed;
+	this->introBlockNum = introBlockNum;
+
+}
 
 void Blending::setEmotion()
 {
@@ -61,8 +61,11 @@ void Blending::blendingFunction(DWORD diff){
 		// Animation 작동시 Emotion에 해당하는 AU의 가중치가 낮아진다.
 
 		if(pronounciation.weight[i] > 0.0){
-			for(int j=i;j<pDoc->units.size();j++)
+
+			for(int j=0;j<pDoc->units.size();j++){
+
 				emotion.weight[j] *= pDoc->directionTable[i][j];		
+			}
 		}
 	}
 
@@ -119,8 +122,7 @@ vector<float> Blending::setEmotionWeight(DWORD diff){
 			// 말 끝난 바로 다음 블럭
 			emotionWeight[i] = 1.0 - abs(((diff - (introBlockNum + pView->speaking.sentence.size() + 1)* speed) * (1.0 - pDoc->units[i].distFromMouth)) / speed);
 
-		}else if(diff >= (introBlockNum + pView->speaking.sentence.size() + 1) * speed
-			/*&& diff < (pView->speaking.introBlockNum + pView->speaking.sentence.size() + pView->speaking.introBlockNum -1) * pView->speaking.speed*/){
+		}else if(diff >= (introBlockNum + pView->speaking.sentence.size() + 1) * speed){
 					
 			// 말 끝난 후 블럭 ~ 끝
 			emotionWeight[i] = 1.0;
@@ -164,10 +166,9 @@ void Blending::BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight) {
 
 	Expression eyeClosed = pView->emotion.emotions[0];
 
-	for (int i = 0;i < pDoc->units.size();i++) {
-		emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];
-	}
-
+	for (int i = 0;i < pDoc->units.size();i++)
+			emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];
+	
 	if (diff - preDiff >= 3000 && eyeClosedOn == 0) {
 
 		eyeClosedOn = 1;	//눈깜빡임 효과 시작

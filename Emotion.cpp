@@ -6,33 +6,45 @@
 
 Emotion::Emotion(void)
 {
-}
-
-Emotion::Emotion(float _speed, int _introBlockNum){
 
 	float tWeight0[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	Expression tTemp0("00. 传皑澜", tWeight0);
 	emotions.push_back(tTemp0);
 
 	float tWeight1[16] = {50.0, 50.0, 0.0, 0.0, 0.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	Expression tTemp1("01. default", tWeight1);
+	Expression tTemp1("01. 扁夯", tWeight1);
 	emotions.push_back(tTemp1);
 
-	float tWeight2[16] = {30.0, 0.0, 30.0, 100.0, 60.0, 5.0, 20.0, 0.0, 30.0, 30.0, 0.0, 100.0, 30.0, 0.0, 0.0, 0.0};
-	Expression tTemp2("02. 解家", tWeight2);
+	float tWeight2[16] = {100.0, 100.0, 0.0, 0.0, 0.0, 10.0, 10.0, 100.0, 100.0, 30.0, 85.0, 85.0, 35.0, 0.0, 0.0, 0.0};
+	Expression tTemp2("02. 固家", tWeight2);
 	emotions.push_back(tTemp2);
-
-	float tWeight3[16] = {100.0, 100.0, 0.0, 0.0, 100.0, 15.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 65.0, 0.0, 25.0};
-	Expression tTemp3("03. 积阿", tWeight3);
+	
+	float tWeight3[16] = {30.0, 0.0, 30.0, 100.0, 60.0, 5.0, 20.0, 0.0, 30.0, 30.0, 0.0, 100.0, 30.0, 0.0, 0.0, 0.0};
+	Expression tTemp3("03. 解家", tWeight3);
 	emotions.push_back(tTemp3);
 
-	speed = _speed;
-	introBlockNum = _introBlockNum;
+	float tWeight4[16] = {100.0, 100.0, 25.0, 25.0, 60.0, 15.0, 15.0, 100.0, 100.0, 65.0, 100.0, 100.0, 0.0, 0.0, 45.0, 0.0};
+	Expression tTemp4("04. 眶澜", tWeight4);
+	emotions.push_back(tTemp4);
 
+	float tWeight5[16] = {100.0, 100.0, 0.0, 0.0, 100.0, 15.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 65.0, 0.0, 25.0};
+	Expression tTemp5("05. 积阿", tWeight5);
+	emotions.push_back(tTemp5);
+
+	float tWeight6[16] = {25.0, 25.0, 100.0, 100.0, 75.0, 10.0, 10.0, 50.0, 50.0, 100.0, 0.0, 0.0, 75.0, 20.0, 0.0, 30.0};
+	Expression tTemp6("06. 盒畴", tWeight6);
+	emotions.push_back(tTemp6);
 }
 
 Emotion::~Emotion(void)
 {
+}
+
+void Emotion::initialUpdate(float speed, int introBlockNum){
+
+	this->speed = speed;
+	this->introBlockNum = introBlockNum;
+
 }
 
 Expression Emotion::getEmotion(){

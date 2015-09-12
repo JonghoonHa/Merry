@@ -43,6 +43,8 @@ public:
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedButton1();
 
+	CSliderCtrl speed;
+
 	CSliderCtrl innerBrowRaiserR;
 	CSliderCtrl innerBrowRaiserL;
 	CSliderCtrl outerBrowRaiserR;

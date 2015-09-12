@@ -247,37 +247,39 @@ IDD_DIALOG1 DIALOGEX 0, 0, 225, 374
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Inner Brow Raiser",IDC_STATIC,20,79,67,8
-    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,76,62,15
-    CONTROL         "",IDC_SLIDER2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,76,62,15
-    PUSHBUTTON      "Save Expression",IDC_BUTTON1,37,271,150,14
+    LTEXT           "Inner Brow Raiser",IDC_STATIC,20,117,67,8
+    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,114,62,15
+    CONTROL         "",IDC_SLIDER2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,114,62,15
+    PUSHBUTTON      "Save Expression",IDC_BUTTON1,37,309,150,14
     GROUPBOX        "Emotion",IDC_STATIC,6,14,212,40
     COMBOBOX        IDC_COMBO1,27,30,179,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "Action Units",IDC_STATIC,6,65,211,248
-    LTEXT           "Outer Brow Raiser",IDC_STATIC,20,96,67,8
-    CONTROL         "",IDC_SLIDER3,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,93,62,15
-    CONTROL         "",IDC_SLIDER4,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,93,62,15
-    LTEXT           "Brow Lowerer",IDC_STATIC,20,113,67,8
-    CONTROL         "",IDC_SLIDER5,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,110,124,15
-    LTEXT           "Eye Close",IDC_STATIC,20,130,67,8
-    CONTROL         "",IDC_SLIDER6,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,127,62,15
-    CONTROL         "",IDC_SLIDER7,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,127,62,15
-    LTEXT           "Cheek Raiser",IDC_STATIC,20,147,67,8
-    CONTROL         "",IDC_SLIDER8,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,144,62,15
-    CONTROL         "",IDC_SLIDER9,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,144,62,15
-    LTEXT           "Nose Wrinkler",IDC_STATIC,20,164,67,8
-    CONTROL         "",IDC_SLIDER10,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,161,124,15
-    LTEXT           "Lip Corner Puler",IDC_STATIC,20,181,67,8
-    CONTROL         "",IDC_SLIDER11,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,178,62,15
-    CONTROL         "",IDC_SLIDER12,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,178,62,15
-    LTEXT           "Chin Raiser",IDC_STATIC,20,199,67,8
-    CONTROL         "",IDC_SLIDER13,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,196,124,15
-    LTEXT           "Lip Puckerer",IDC_STATIC,20,216,67,8
-    CONTROL         "",IDC_SLIDER14,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,213,124,15
-    LTEXT           "Lips part",IDC_STATIC,20,234,67,8
-    CONTROL         "",IDC_SLIDER15,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,231,124,15
-    LTEXT           "Stick Out Lower Lip",IDC_STATIC,20,251,67,8
-    CONTROL         "",IDC_SLIDER16,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,248,124,15
+    GROUPBOX        "Action Units",IDC_STATIC,6,103,211,248
+    LTEXT           "Outer Brow Raiser",IDC_STATIC,20,134,67,8
+    CONTROL         "",IDC_SLIDER3,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,131,62,15
+    CONTROL         "",IDC_SLIDER4,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,131,62,15
+    LTEXT           "Brow Lowerer",IDC_STATIC,20,151,67,8
+    CONTROL         "",IDC_SLIDER5,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,148,124,15
+    LTEXT           "Eye Close",IDC_STATIC,20,168,67,8
+    CONTROL         "",IDC_SLIDER6,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,165,62,15
+    CONTROL         "",IDC_SLIDER7,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,165,62,15
+    LTEXT           "Cheek Raiser",IDC_STATIC,20,185,67,8
+    CONTROL         "",IDC_SLIDER8,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,182,62,15
+    CONTROL         "",IDC_SLIDER9,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,182,62,15
+    LTEXT           "Nose Wrinkler",IDC_STATIC,20,202,67,8
+    CONTROL         "",IDC_SLIDER10,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,199,124,15
+    LTEXT           "Lip Corner Puler",IDC_STATIC,20,219,67,8
+    CONTROL         "",IDC_SLIDER11,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,216,62,15
+    CONTROL         "",IDC_SLIDER12,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,146,216,62,15
+    LTEXT           "Chin Raiser",IDC_STATIC,20,237,67,8
+    CONTROL         "",IDC_SLIDER13,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,234,124,15
+    LTEXT           "Lip Puckerer",IDC_STATIC,20,254,67,8
+    CONTROL         "",IDC_SLIDER14,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,251,124,15
+    LTEXT           "Lips part",IDC_STATIC,20,272,67,8
+    CONTROL         "",IDC_SLIDER15,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,269,124,15
+    LTEXT           "Stick Out Lower Lip",IDC_STATIC,20,289,67,8
+    CONTROL         "",IDC_SLIDER16,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,85,286,124,15
+    GROUPBOX        "Speed",IDC_STATIC,6,59,212,40
+    CONTROL         "",IDC_SLIDER17,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,20,72,185,15
 END
 
 IDD_DIALOG2 DIALOGEX 0, 0, 576, 71

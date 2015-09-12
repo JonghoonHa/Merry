@@ -4,14 +4,9 @@
 #include "ControllerView.h"
 
 Speaking::Speaking(void){
-}
-Speaking::Speaking(float _speed, int _introBlockNum)
-{
-	speed = _speed;
-	introBlockNum = _introBlockNum;
 
-	preIdx = 0; currIdx = 0; nextIdx = 0;
-	preWeight = 0.0; currWeight = 0.0; nextWeight = 0.0;
+	preIdx = 0; currIdx = 0;
+	preWeight = 0.0; currWeight = 0.0;
 
 	emotionTagFlag = false;
 
@@ -38,11 +33,11 @@ Speaking::Speaking(float _speed, int _introBlockNum)
 	Expression tTemp2("a", tWeight2);
 	pronounciations.push_back(tTemp2);
 
-	float tWeight3[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 50.0, 50.0, 0.0, 0.0, 40.0, 0.0};
+	float tWeight3[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 20.0, 20.0, 0.0, 50.0, 50.0, 0.0, 0.0, 40.0, 0.0};
 	Expression tTemp3("e", tWeight3);
 	pronounciations.push_back(tTemp3);
 
-	float tWeight4[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 80.0, 0.0, 0.0, 20.0, 0.0};
+	float tWeight4[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 60.0, 60.0, 0.0, 80.0, 80.0, 0.0, 0.0, 20.0, 0.0};
 	Expression tTemp4("i", tWeight4);
 	pronounciations.push_back(tTemp4);
 
@@ -50,7 +45,7 @@ Speaking::Speaking(float _speed, int _introBlockNum)
 	Expression tTemp5("o", tWeight5);
 	pronounciations.push_back(tTemp5);
 
-	float tWeight6[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 100.0, 60.0, 0.0};
+	float tWeight6[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 100.0, 20.0, 0.0};
 	Expression tTemp6("u", tWeight6);
 	pronounciations.push_back(tTemp6);
 
@@ -61,7 +56,6 @@ Speaking::Speaking(float _speed, int _introBlockNum)
 	float tWeight8[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0};
 	Expression tTemp8("m", tWeight8);
 	pronounciations.push_back(tTemp8);
-
 }
 
 Speaking::~Speaking(void)
@@ -73,6 +67,13 @@ Expression Speaking::getPronounciation(void)
 	return nowLook;
 }
 
+void Speaking::initialUpdate(float speed, int introBlockNum){
+
+	this->speed = speed;
+	this->introBlockNum = introBlockNum;
+
+}
+
 void Speaking::transSentenceToIdx(void)
 {
 	// 입력한 문장을 시스템 내부 인덱스 값으로 변환
@@ -81,20 +82,6 @@ void Speaking::transSentenceToIdx(void)
 
 		transSentence[k] = matchPronounciationIdx(sentence[k]);
 	}
-
-	//// 'hello', 'merry'와 같이 e와 마지막 글자사이에 나오는 자음 제어
-	//for(int k=0;k<sentence.size()-3;k++){// 문장의 글자가 2개 이하일 때 오류 유발
-	//	 
-	//	if(sentence[k] == 'e' && 
-	//		(sentence[k+1] != ' ' && sentence[k+1] != '.' ) &&
-	//		(sentence[k+2] != ' ' && sentence[k+2] != '.' ) &&
-	//		(transSentence[k+3] != 1 && transSentence[k+3] != 0)){
-	//					
-	//			transSentence[k+1] = transSentence[k];
-	//			transSentence[k+2] = transSentence[k+3];
-
-	//	}
-	//}
 
 	// 'is'에서 s을 1로 제어
 	for(int k=1;k<sentence.size();k++){
@@ -131,32 +118,31 @@ void Speaking::transSentenceToIdx(void)
 			this_condition_end = true;	
 	}
 
-	//'my'와 같이 끝이 y로 끝나는 것 1로 제어
-	for(int k=1;k<sentence.size();k++){
+	//'my', 'hi'등의 발음 [ai]로 제어
+	for(int k=0;k<sentence.size();k++){
 	
-		if(sentence[k-1] == 'm' && sentence[k] == 'y'){
-			transSentence[k] = 1;
+		if(sentence[k] == 'y' || sentence[k] == 'i'){
+
+			if(k == sentence.size()-1){
+				sentence.push_back(' ');
+
+				transSentence[k] = 2;
+				transSentence.push_back(4);			
+			}else if(sentence[k+1] = ' '){
+				transSentence[k] = 2;
+				transSentence[k+1] = 4;
+			}
+			
 		}
 	}
 			
 	//'merry'의 m을 0로 제어
 	for(int k=0;k<sentence.size()-1;k++){
 						
-		if(sentence[k] == 'm' && sentence[k+1] == 'e'){
+		if(sentence[k] == 'm'){
 			transSentence[k] = 0;
 		}
 	}
-
-	////표정 태그인'(', ')'를 표정 값으로 제어
-	//for(int k=0;k<sentence.size()-1;k++){
-	//					
-	//	if(sentence[k] == '('){
-	//		transSentence[k] = transSentence[k+1];
-	//	}
-	//	if(sentence[k] == ')'){
-	//		transSentence[k] = transSentence[k-1];
-	//	}
-	//}
 
 }
 
@@ -221,7 +207,6 @@ void Speaking::setCharAtTime(DWORD diff)
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
 	ControllerView* controller = (ControllerView*)pFrame->m_wndSplitter.GetPane(0,1);
 
-	const int introTime = introBlockNum * speed;
 	int currBlockNum = diff/speed;
 
 	if(diff <= ( sentence.size() + (introBlockNum*2) ) * speed ){   
