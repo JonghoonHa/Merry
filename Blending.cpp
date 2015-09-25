@@ -56,7 +56,7 @@ void Blending::blendingFunction(DWORD diff){
 
 	for(int i=0;i<pDoc->units.size();i++){
 
-		// 방향 - 거리 관계 적용
+		// 방향 관계 적용
 		// 서로 다른 두 AU의 방향 관계가 180도에 가까울수록,
 		// Animation 작동시 Emotion에 해당하는 AU의 가중치가 낮아진다.
 
@@ -66,18 +66,18 @@ void Blending::blendingFunction(DWORD diff){
 
 				emotion.weight[j] *= pDoc->directionTable[i][j];		
 			}
+
+			// 말하는 AU는 입-거리 model 적용
+			emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];		
+		}else{
+
+			// 말 안하는 AU는 입-거리 model 미적용
+			emotion_withEyeclose.weight[i] = emotion.weight[i];
 		}
 	}
 
-	//////////////////////////////////////////////////////////////////////////////
-
-	/*----------------------------
-	눈깜빡임 효과 코드
-	---------------------------*/
-	BlendWithEyeClosed(diff, emotionWeight);
-
-	//////////////////////////////////////////////////////////////////////////////
-
+	// 눈깜빡임 효과
+	BlendWithEyeClosed(diff);
 
 	for (int i = 0;i<pDoc->units.size();i++) {
 
@@ -138,7 +138,7 @@ vector<float> Blending::setEmotionWeight(DWORD diff){
 	return emotionWeight;
 }
 
-void Blending::BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight) {
+void Blending::BlendWithEyeClosed(DWORD diff) {
 
 	/*
 
@@ -162,17 +162,13 @@ void Blending::BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight) {
 	*/
 	CMainFrame* pFrame = (CMainFrame *)AfxGetMainWnd();
 	CMerryView* pView  = (CMerryView *)pFrame->m_wndSplitterSub.GetPane(0, 0);
-	CMerryDoc* pDoc = (CMerryDoc *)pFrame->GetActiveDocument();
 
 	Expression eyeClosed = pView->emotion.emotions[0];
-
-	for (int i = 0;i < pDoc->units.size();i++)
-			emotion_withEyeclose.weight[i] = emotion.weight[i] * emotionWeight[i];
 	
 	if (diff - preDiff >= 3000 && eyeClosedOn == 0) {
 
 		eyeClosedOn = 1;	//눈깜빡임 효과 시작
-		eyeStatus = emotion.weight[5] * emotionWeight[5];
+		eyeStatus = emotion.weight[5];
 	}
 
 	if (eyeClosedOn == 1) {
@@ -200,10 +196,10 @@ void Blending::BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight) {
 		emotion_withEyeclose.weight[6] = w1*eyeStatus + w2*eyeClosed.weight[6];
 
 
-		if (emotion_withEyeclose.weight[5] < emotion.weight[5] * emotionWeight[5]) {
+		if (emotion_withEyeclose.weight[5] < emotion.weight[5]) {
 
-			emotion_withEyeclose.weight[5] = emotion.weight[5] * emotionWeight[5];
-			emotion_withEyeclose.weight[6] = emotion.weight[6] * emotionWeight[6];
+			emotion_withEyeclose.weight[5] = emotion.weight[5];
+			emotion_withEyeclose.weight[6] = emotion.weight[6];
 			eyeClosedOn = 0;
 
 			preDiff = diff;

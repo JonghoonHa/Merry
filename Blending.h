@@ -30,7 +30,7 @@ private:
 	float w1, w2;
 
 	vector<float> setEmotionWeight(DWORD diff);
-	void BlendWithEyeClosed(DWORD diff, vector<float> emotionWeight);
+	void BlendWithEyeClosed(DWORD diff);
 	
 };
 
