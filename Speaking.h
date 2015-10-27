@@ -8,10 +8,10 @@ class Speaking
 public:	
 	vector<Expression> pronounciations;
 
-
-
 	vector<char> sentence;
 	vector<int> transSentence;
+
+	bool emotionTagFlag;
 
 	Expression nowLook;
 	
@@ -20,18 +20,15 @@ public:
 
 	
 
-	//bool this_condition_end;
+	bool this_condition_end;
 
 	Expression getPronounciation(void);
 
 	void transSentenceToIdx(void);
-	std::string matchPronounciationIdx(vector<char> word);
+	int matchPronounciationIdx(char letter);
 	void setCharAtTime(DWORD diff);	
 	void setWeightAtTime(DWORD diff);
 	void calCurrLook(void);
-
-	/*실제소리*/	
-	static UINT voice(LPVOID IParam);
 
 	Speaking(void);
 	Speaking(float _speed, int _introBlockNum);

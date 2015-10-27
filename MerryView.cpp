@@ -29,13 +29,10 @@
 #include <vector>
 #include <stdlib.h>
 #include <math.h>
-#include <string>
 
 #include <iostream>
 
 #include <SOIL.h>
-#include <thread>
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -230,30 +227,12 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 	if(animationFlag){ // animation codes
 
 		if(getStartTime == true){
-					
+
 			// 애니메이션 시작 시각 기록
 			startTime = GetTickCount();
 			getStartTime = false;
 
 			speaking.transSentenceToIdx();
-
-			/*실제음성 삽입*/
-		
-			//vector<char>형에서 char*로 형변환				
-			std::string s = std::string(speaking.sentence.begin(), speaking.sentence.end());
-			
-			char* myBuffer = new char[s.length() + 1];
-			std::strcpy(myBuffer, s.c_str());
-			//delete[] myBuffer			
-			
-			/*ofstream out;
-			out.open("output7-myBuffer.txt");
-
-			out << myBuffer;
-			out.close();*/
-		
-			m_pNCThread = AfxBeginThread(Speaking::voice, (LPVOID)myBuffer);
-						
 		}
 
 		nowTime = GetTickCount();
@@ -276,6 +255,7 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 		if(firstDrawFlag){
 
 			firstDrawFlag = false;
+
 			blending.finalExpression = emotion.emotions[controller->selectedEmotionIdx];
 		}
 
@@ -2041,4 +2021,3 @@ float CMerryView::getDistance(glm::vec3 p1, glm::vec3 p2){
 	return result;
 
 }
-
