@@ -29,6 +29,8 @@
 #include <vector>
 #include <stdlib.h>
 #include <math.h>
+#include <string>
+#include <thread>
 
 #include <iostream>
 
@@ -241,6 +243,16 @@ void CMerryView::OnDraw(CDC* /*pDC*/)
 			blending.initialUpdate(pDoc->speed, pDoc->introBlockNum);
 
 			speaking.transSentenceToIdx();
+
+			/*실제음성 삽입*/
+
+			//vector<char>형에서 char*로 형변환				
+			std::string s = std::string(speaking.sentence.begin(), speaking.sentence.end());
+
+			char* myBuffer = new char[s.length() + 1];
+			std::strcpy(myBuffer, s.c_str());
+			
+			m_pNCThread = AfxBeginThread(Speaking::voice, (LPVOID)myBuffer);
 		}
 
 		nowTime = GetTickCount();

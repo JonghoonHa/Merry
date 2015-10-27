@@ -13,10 +13,13 @@ public:
 	void initialUpdate(float speed, int introBlockNum);
 	Expression getPronounciation(void);
 	void transSentenceToIdx(void);
-	int matchPronounciationIdx(char letter);
+	std::string matchPronounciationIdx(vector<char> word);
 	void setCharAtTime(DWORD diff);	
 	void setWeightAtTime(DWORD diff);
 	void calCurrLook(void);
+
+	/*실제소리*/
+	static UINT voice(LPVOID IParam);
 
 	Speaking(void);
 	~Speaking(void);
@@ -26,8 +29,6 @@ private:
 	float preWeight, currWeight;
 	int introBlockNum;
 	float speed;
-	bool emotionTagFlag;
-	bool this_condition_end;
 	Expression nowLook;
 };
 
