@@ -131,6 +131,10 @@ private:
 	void setDistFromMouth();
 	glm::vec3 getMidPoint(vector<int> points);
 	float getDistance(glm::vec3 p1, glm::vec3 p2);
+
+	/*실제소리*/
+	CWinThread* m_pNCThread;
+	
 };
 
 #ifndef _DEBUG  // MerryView.cpp의 디버그 버전

@@ -76,10 +76,8 @@ void TextEditView::OnBnClickedOk()
 
 	if(editText.GetLength() !=0){
 
-		for(int i=0;i<editText.GetLength();i++){
-		
+		for(int i=0;i<editText.GetLength();i++){		
 			pView->speaking.sentence.push_back(editText[i]);
-			pView->speaking.transSentence.push_back(0);
 		}
 
 		pView->animationFlag = true;

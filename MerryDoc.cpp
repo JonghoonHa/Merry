@@ -34,7 +34,7 @@ CMerryDoc::CMerryDoc()
 
 	ActionUnit temp;
 
-	speed = 200.0;
+	speed = 630.0;
 	introBlockNum = 10;
 	//introTime = introBlockNum * speed;
 
