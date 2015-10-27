@@ -96,6 +96,7 @@ public:
 	DWORD nowTime;
 	DWORD diff;
 
+
 private:	
 
 	GLuint pro;
@@ -112,6 +113,9 @@ private:
 	GLfloat lightDiffuse[4];
 	GLfloat lightSpecular[4];
 	GLfloat lightShineness;
+
+	// 소리
+	CWinThread* m_pNCThread;
 
 	// opengl 설정
 	bool makecontext(void);
